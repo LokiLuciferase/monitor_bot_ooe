@@ -69,8 +69,8 @@ def divvy(msg):
 
 admin = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='$exceptions'), KeyboardButton(text='$stats -v')],
-    [KeyboardButton(text='tail -30 logs/history.log')],
-    [KeyboardButton(text='tail -30 logs/monitorlog.log')]
+    [KeyboardButton(text='tail -30 logs/history.log'), KeyboardButton(text='tail -30 logs/monitorlog.log')],
+    [KeyboardButton(text='scripts/update.sh')]
 ])
 
 auvi = ReplyKeyboardMarkup(keyboard=[
