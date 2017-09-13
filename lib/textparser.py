@@ -2,12 +2,12 @@ import textwrap
 
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 
-from lib.processor import chaincall, macro
+from lib.processor import chaincall
 from lib.camcont import snap, vid
 from lib.relaiscont import activate_relais
 
 
-
+# packages up response of bot, flavor of response and eventual changes in keyboard
 class Answer:
     def __init__(self, values, itemtype, comments="", keys=None):
         self.type = itemtype
@@ -26,6 +26,7 @@ class Answer:
             self.payload = values
 
 
+# divides text inputs from the user up and calls module functions
 def divvy(msg):
 
     if msg[0] == '$':
@@ -72,13 +73,39 @@ def divvy(msg):
 
     return std
 
-# ReplyMarkupKeyboard definitions here
 
+def macro(querystring):
+
+    # define useful macros here which would be tedious to write on a phone.
+    macrodic = {"checkbots"   : "ps aux | grep -i '[b]ot'",
+                "checksamba"  : "ps aux | grep -i 'smbd'",
+                "stats"       : "./scripts/stats.sh",
+                "stats -v"    : "./scripts/stats.sh -v",
+                "bothistory"  : "cat ./logs/history.log | tail -500",
+                "exceptions"  : "cat ./logs/monitorlog.log | grep 'Traceback' | wc -l",
+                "historylog"  : "tail -30 logs/history.log",
+                "errorlog"    : "tail -30 logs/monitorlog.log",
+                "update"      : "scripts/update.sh",
+                "clean"       : "rm data/snaps/*",
+                "reboot"      : "sudo reboot now"
+                }
+
+    if querystring == "macros":
+        return "Existierende Makros:\n" + "".join(["%s : %s\n" % (x, y) for x, y in macrodic.items()])
+
+    try:
+        answer = macrodic[querystring]
+        return chaincall(answer)
+    except KeyError:
+        return "Ein solches Makro existiert nicht."
+
+
+# ReplyMarkupKeyboard definitions here
 
 admin = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='$exceptions'), KeyboardButton(text='$stats -v')],
     [KeyboardButton(text='$historylog'), KeyboardButton(text='$errorlog')],
-    [KeyboardButton(text='$update'), KeyboardButton(text='$clean')]
+    [KeyboardButton(text='$update'), KeyboardButton(text='$clean'), KeyboardButton(text='$reboot')]
 ])
 
 auvi = ReplyKeyboardMarkup(keyboard=[

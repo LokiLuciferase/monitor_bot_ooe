@@ -5,19 +5,20 @@ import subprocess
 SAVELOC = '/home/pi/scripts/monitor_bot_ooe/data/snaps/'
 
 
+# Takes a picture with PiCamera
 def snap():
 
-    cam = PiCamera()
-    cam.start_preview()
-    sleep(2)
-    cam.rotation = 180
-    picname = "%s%s.png" % (SAVELOC, "-".join(str(time()).split(".")))
-    cam.capture(picname)
-    cam.stop_preview()
-    cam.close()
+    with PiCamera() as cam:
+        cam.start_preview()
+        sleep(2)
+        cam.rotation = 180
+        picname = "%s%s.png" % (SAVELOC, "-".join(str(time()).split(".")))
+        cam.capture(picname)
+        cam.stop_preview()
     return picname
 
 
+# Takes a video with PiCamera and converts it to mp4 with MP4Box
 def vid(duration):
 
     vidname = "%s%s" % (SAVELOC, "-".join(str(time()).split(".")))

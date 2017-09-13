@@ -1,6 +1,8 @@
 import subprocess
 
 
+# passes arguments to shell, implements arbitrary length pipes
+# returns decoded stdout as string
 def chaincall(querystring):
 
     subqueries = querystring.split("|")
@@ -15,28 +17,3 @@ def chaincall(querystring):
     out, err = jobs[-1].communicate()
 
     return out.decode('utf-8')
-
-
-def macro(querystring):
-
-    # define useful macros here which would be tedious to write on a phone.
-    macrodic = {"checkbots"   : "ps aux | grep -i '[b]ot'",
-                "checksamba"  : "ps aux | grep -i 'smbd'",
-                "stats"       : "./scripts/stats.sh",
-                "stats -v"    : "./scripts/stats.sh -v",
-                "bothistory"  : "cat ./logs/history.log | tail -500",
-                "exceptions"  : "cat ./logs/monitorlog.log | grep 'Traceback' | wc -l",
-                "historylog" : "tail -30 logs/history.log",
-                "errorlog"   : "tail -30 logs/monitorlog.log",
-                "update"     : "scripts/update.sh",
-                "clean"      : "rm data/snaps/*"
-                }
-
-    if querystring == "macros":
-        return "Existierende Makros:\n" + "".join(["%s : %s\n" % (x, y) for x, y in macrodic.items()])
-
-    try:
-        answer = macrodic[querystring]
-        return chaincall(answer)
-    except KeyError:
-        return "Ein solches Makro existiert nicht."
