@@ -26,10 +26,10 @@ def macro(querystring):
                 "stats -v"    : "./scripts/stats.sh -v",
                 "bothistory"  : "cat ./logs/history.log | tail -500",
                 "exceptions"  : "cat ./logs/monitorlog.log | grep 'Traceback' | wc -l",
-                "$historylog" : "tail -30 logs/history.log",
-                "$errorlog"   : "tail -30 logs/monitorlog.log",
-                "$update"     : "scripts/update.sh",
-                "$clean"      : "rm data/snaps/*"
+                "historylog" : "tail -30 logs/history.log",
+                "errorlog"   : "tail -30 logs/monitorlog.log",
+                "update"     : "scripts/update.sh",
+                "clean"      : "rm data/snaps/*"
                 }
 
     if querystring == "macros":
