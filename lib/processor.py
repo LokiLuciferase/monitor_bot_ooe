@@ -28,10 +28,10 @@ def macro(querystring):
                 "exceptions": "cat ./logs/monitorlog.log | grep 'Traceback' | wc -l"}
 
     if querystring == "macros":
-        return "Existing macros:\n" + "".join(["%s : %s\n" % (x, y) for x, y in macrodic.items()])
+        return "Existierende Makros:\n" + "".join(["%s : %s\n" % (x, y) for x, y in macrodic.items()])
 
     try:
         answer = macrodic[querystring]
         return chaincall(answer)
     except KeyError:
-        return "No such macro exists."
+        return "Ein solches Makro existiert nicht."

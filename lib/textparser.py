@@ -1,8 +1,12 @@
 import textwrap
+
+from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
+
 from lib.processor import chaincall, macro
 from lib.camcont import snap, vid
 from lib.relaiscont import activate_relais
-from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
+
+
 
 class Answer:
     def __init__(self, values, itemtype, comments="", keys=None):
@@ -20,6 +24,7 @@ class Answer:
         
         if self.type in ('vid', 'image'):
             self.payload = values
+
 
 def divvy(msg):
 
@@ -49,7 +54,7 @@ def divvy(msg):
         try:
             returnkb = boards[msg.split()[1]]
             std = Answer("Keyboard aktiviert.", "txt", keys=returnkb)
-        except:
+        except KeyError:
             std = Answer("Unbekanntes Keyboard.", "txt")
 
     elif msg == "hilfe":
@@ -66,6 +71,9 @@ def divvy(msg):
         std = Answer(chaincall(msg), "txt")
 
     return std
+
+# ReplyMarkupKeyboard definitions here
+
 
 admin = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='$exceptions'), KeyboardButton(text='$stats -v')],
