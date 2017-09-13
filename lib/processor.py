@@ -20,12 +20,17 @@ def chaincall(querystring):
 def macro(querystring):
 
     # define useful macros here which would be tedious to write on a phone.
-    macrodic = {"checkbots" : "ps aux | grep -i '[b]ot'",
-                "checksamba": "ps aux | grep -i 'smbd'",
-                "stats"     : "./scripts/stats.sh",
-                "stats -v"  : "./scripts/stats.sh -v",
-                "bothistory": "cat ./logs/history.log | tail -500",
-                "exceptions": "cat ./logs/monitorlog.log | grep 'Traceback' | wc -l"}
+    macrodic = {"checkbots"   : "ps aux | grep -i '[b]ot'",
+                "checksamba"  : "ps aux | grep -i 'smbd'",
+                "stats"       : "./scripts/stats.sh",
+                "stats -v"    : "./scripts/stats.sh -v",
+                "bothistory"  : "cat ./logs/history.log | tail -500",
+                "exceptions"  : "cat ./logs/monitorlog.log | grep 'Traceback' | wc -l",
+                "$historylog" : "tail -30 logs/history.log",
+                "$errorlog"   : "tail -30 logs/monitorlog.log",
+                "$update"     : "scripts/update.sh",
+                "$clean"      : "rm data/snaps/*"
+                }
 
     if querystring == "macros":
         return "Existierende Makros:\n" + "".join(["%s : %s\n" % (x, y) for x, y in macrodic.items()])

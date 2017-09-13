@@ -77,8 +77,8 @@ def divvy(msg):
 
 admin = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='$exceptions'), KeyboardButton(text='$stats -v')],
-    [KeyboardButton(text='tail -30 logs/history.log'), KeyboardButton(text='tail -30 logs/monitorlog.log')],
-    [KeyboardButton(text='scripts/update.sh'), KeyboardButton(text='rm data/snaps/*')]
+    [KeyboardButton(text='$historylog'), KeyboardButton(text='$errorlog')],
+    [KeyboardButton(text='$update'), KeyboardButton(text='$clean')]
 ])
 
 auvi = ReplyKeyboardMarkup(keyboard=[
