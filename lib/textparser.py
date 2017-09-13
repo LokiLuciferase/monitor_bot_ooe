@@ -59,7 +59,7 @@ def divvy(msg):
                  "'relais <1,2> <sekunden>': Schaltet das Relais <1,2> für <sekunden> ein.\n" \
                  "'$stats': gibt eine Übersicht über alle wichtigen Eckdaten des Raspberry Pi.\n" \
                  "'$stats -v': Wie $stats, aber ausführlichere infos.\n" \
-                 "Alle anderen Kommandos werden als shell commands für den RPi2 interpretiert.\n"
+                 "Alle anderen Kommandos werden als shell commands für den RPi interpretiert.\n"
         std = Answer(tirade, "txt")
         
     else:

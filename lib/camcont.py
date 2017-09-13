@@ -2,7 +2,7 @@ from picamera import PiCamera
 from time import sleep, time
 import subprocess
 
-SAVELOC = '/home/pi/scripts/MonitorBot/data/snaps/'
+SAVELOC = '/home/pi/scripts/monitor_bot_ooe/data/snaps/'
 
 def snap():
 

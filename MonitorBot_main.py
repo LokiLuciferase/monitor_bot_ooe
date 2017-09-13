@@ -8,7 +8,7 @@ from telepot.loop import MessageLoop
 from urllib3.exceptions import NewConnectionError
 
 from lib.textparser import divvy
-from lib.secrets import pimonitor_token, valid_users
+from data.tokens import pimonitor_token, valid_users
 
 sys.path.insert(0, sys.path[0])
 TOKEN = pimonitor_token
