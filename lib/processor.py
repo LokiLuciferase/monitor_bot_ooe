@@ -22,8 +22,8 @@ def macro(querystring):
     # define useful macros here which would be tedious to write on a phone.
     macrodic = {"checkbots" : "ps aux | grep -i '[b]ot'",
                 "checksamba": "ps aux | grep -i 'smbd'",
-                "stats"     : "./lib/stats.sh",
-                "stats -v"  : "./lib/stats.sh -v",
+                "stats"     : "./scripts/stats.sh",
+                "stats -v"  : "./scripts/stats.sh -v",
                 "bothistory": "cat ./logs/history.log | tail -500",
                 "exceptions": "cat ./logs/monitorlog.log | grep 'Traceback' | wc -l"}
 
