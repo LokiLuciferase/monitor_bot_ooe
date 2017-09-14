@@ -35,7 +35,7 @@ if [[ $# -ne 0 ]] ; then
         echo "Total size of /share-sd including folders: $(du -sh /share-sd)"
         ls -sh "/share-sd" | awk 'NR > 1 {print}'
         echo ""
-        echo "Total size of /share including folders: $(du -sh/share)"
+        echo "Total size of /share including folders: $(du -sh /share)"
         ls -sh "/share" | awk 'NR > 1 {print}'
     fi
 fi
