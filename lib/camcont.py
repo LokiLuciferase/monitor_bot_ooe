@@ -42,8 +42,8 @@ class TimelapseThread(threading.Thread):
 
     def __init__(self, snaps_per_h, total_snaps):
         super(TimelapseThread, self).__init__()
-        self.snaps_per_h = snaps_per_h
-        self.total_snaps = total_snaps
+        self.snaps_per_h = int(snaps_per_h)
+        self.total_snaps = int(total_snaps)
 
     def run(self):
         global hot_time_lapse, time_lapse_running
