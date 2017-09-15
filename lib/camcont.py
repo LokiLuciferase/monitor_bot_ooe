@@ -37,13 +37,15 @@ def vid(duration):
     subprocess.call(["MP4Box", "-quiet", "-add", "%s.h264" % vidname, "%s.mp4" % vidname])
     return "%s.mp4" % vidname
 
+
 # creates a thread which takes images at set intervals and ultimately returns a timelapse video
 class TimelapseThread(threading.Thread):
 
-    def __init__(self, snaps_per_h, total_snaps):
+    def __init__(self, snaps_per_h, total_snaps, snaptime):
         super(TimelapseThread, self).__init__()
         self.snaps_per_h = int(snaps_per_h)
         self.total_snaps = int(total_snaps)
+        self.snaptime = snaptime
 
     def run(self):
         global hot_time_lapse, time_lapse_running
@@ -55,15 +57,15 @@ class TimelapseThread(threading.Thread):
         if self.snaps_per_h > 180:
             time_lapse_running = True
 
-        timelapse(self.snaps_per_h, self.total_snaps)
+        timelapse(self.snaps_per_h, self.total_snaps, self.snaptime)
         hot_time_lapse = False
         time_lapse_running = False
 
 
-def timelapse(snaps_per_h, total_snaps):
+def timelapse(snaps_per_h, total_snaps, snaptime):
 
     boundedsnaps = snaps_per_h if (snaps_per_h < 360) else 360
-    lapse_folder_name = "./data/timelapses/Timelapse_%s_sph_%s_total_%s" % (boundedsnaps, total_snaps, time())
+    lapse_folder_name = "./data/timelapses/Timelapse_%s_sph_%s_total_%s" % (boundedsnaps, total_snaps, snaptime)
     if os.path.exists(lapse_folder_name):
         return lapse_folder_name
     os.makedirs(lapse_folder_name)
@@ -76,10 +78,12 @@ def timelapse(snaps_per_h, total_snaps):
             pass
         sleep(3600 // boundedsnaps)
 
-    subprocess.call(["ffmpeg", "-loglevel", "panic", "-r", "25", "-qscale", "2", "-i", "lapse_%03d.png", "%s.mp4" % lapse_folder_name])
+    subprocess.call(["ffmpeg", "-loglevel", "panic", "-r", "25", "-qscale", "2", "-i", "{path}/lapse_%03d.png".format(path=lapse_folder_name), "%s.mp4" % lapse_folder_name])
 
 
 def start_timelapse(sph, ts):
 
-    tt = TimelapseThread(sph, ts)
+    st = "-".join(str(time()).split("."))
+    tt = TimelapseThread(sph, ts, st)
     tt.start()
+    return st

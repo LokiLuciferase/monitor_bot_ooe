@@ -47,8 +47,8 @@ def divvy(msg):
             std = Answer("Die Zeitrafferfunktion benötigt folgende Argumente: timelapse <fotos pro stunde> <gesamtzahl>", "txt")
         else:
             comm, sph, ts = msg.split()
-            start_timelapse(sph, ts)
-            std = Answer("Zeitraffer gestartet.", "txt")
+            timestamp = start_timelapse(sph, ts)
+            std = Answer("Zeitraffer gestartet. Zeitsignatur: %s" % timestamp, "txt")
 
     elif msg.startswith('relais'):
         if len(msg.split()) != 3:
