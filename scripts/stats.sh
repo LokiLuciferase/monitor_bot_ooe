@@ -18,6 +18,7 @@ echo ""
 echo "File system:"
 df -h
 echo ""
+echo "System stability: $(cat logs/monitorlog.log | grep "Traceback" | wc -l) python exceptions logged."
 echo "Security:"
 intruders=$(cat logs/history.log | grep -A 3 "INTRUDER")
 if [[ $intruders = "" ]] ; then
