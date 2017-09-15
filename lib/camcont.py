@@ -25,9 +25,12 @@ def vid(duration):
     with PiCamera() as cam:
         cam.rotation = 180
         cam.resolution = (1024, 768)
+        cam.start_preview()
+        sleep(2)
         cam.start_recording("%s.h264" % vidname)
         cam.wait_recording(duration)
         cam.stop_recording()
+        cam.stop_preview()
     subprocess.call(["MP4Box", "-quiet", "-add", "%s.h264" % vidname, "%s.mp4" % vidname])
     return "%s.mp4" % vidname
 
