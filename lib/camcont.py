@@ -72,13 +72,13 @@ def timelapse(snaps_per_h, total_snaps, snaptime):
 
     for times in range(total_snaps):
         try:
-            lapse_pic_name = "%s/lapse_%s.png" % (lapse_folder_name, str(times + 1).zfill(3))
+            lapse_pic_name = "%s/lapse%s.png" % (lapse_folder_name, str(times + 1).zfill(3))
             snap(lapse_pic_name)
         except:
             pass
         sleep(3600 // boundedsnaps)
 
-    subprocess.call(["ffmpeg", "-loglevel", "panic", "-r", "25", "-qscale", "2", "-i", "{path}/lapse_%03d.png".format(path=lapse_folder_name), "%s.mp4" % lapse_folder_name])
+    subprocess.call(["ffmpeg", "-r", "25", "-i", "{path}/lapse%03d.png".format(path=lapse_folder_name), "%s.mp4" % lapse_folder_name])
 
 
 def start_timelapse(sph, ts):
@@ -87,3 +87,4 @@ def start_timelapse(sph, ts):
     tt = TimelapseThread(sph, ts, st)
     tt.start()
     return st
+
