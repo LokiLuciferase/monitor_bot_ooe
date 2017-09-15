@@ -3,7 +3,7 @@ import textwrap
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 
 from lib.processor import chaincall
-from lib.camcont import snap, vid
+from lib.camcont import snap, vid, start_timelapse
 from lib.relaiscont import activate_relais
 
 
@@ -41,6 +41,14 @@ def divvy(msg):
         else:
             comm, dur = msg.split()
             std = Answer(vid(int(dur)), "vid")
+
+    elif msg.startswith('timelapse'):
+        if len(msg.split()) != 3:
+            std = Answer("Die Zeitrafferfunktion benötigt folgende Argumente: timelapse <fotos pro stunde> <gesamtzahl>", "txt")
+        else:
+            comm, sph, ts = msg.split()
+            start_timelapse(sph, ts)
+            std = Answer("Zeitraffer gestartet.", "txt")
 
     elif msg.startswith('relais'):
         if len(msg.split()) != 3:
