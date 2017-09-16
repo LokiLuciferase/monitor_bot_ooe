@@ -55,7 +55,10 @@ def divvy(fullmess):
             return Answer("Es wurde kein neues Zeitraffervideo gefunden. %s" % tlstatus, 'txt')
 
         if not lib.timelapse.time_lapse_running:
-            timestamp = lib.timelapse.start_timelapse(msg[1], msg[2])
+            delay = 0
+            if len(msg) == 5 and msg[3] == "waitfor":  # rework this at some point
+                delay = int(msg[4])
+            timestamp = lib.timelapse.start_timelapse(msg[1], msg[2], delay)
             sleep(1)
             totaldur = round(((60 / int(msg[1])) * int(msg[2])), 3)
             runmess = "Zeitraffer gestartet. Zeitsignatur: %s.\n" \
@@ -74,7 +77,7 @@ def divvy(fullmess):
         tirade = "Dies ist der PiMonitorBot.\nFunktionen (ohne Anführungszeichen eingeben):\n" \
                  "'photo': Schießt ein Foto und sendet es. Optional: zusätzliches Argument 'hd' für HD Foto.\n" \
                  "'video <sekunden>': Schießt ein Video von <sekunden> Länge und sendet es.\n" \
-                 "'timelapse <photos_pro_h> <gesamtzahl_photos>': Zeitrafferaufnahme.\n" \
+                 "'timelapse <photos_pro_h> <gesamtzahl_photos>': Zeitrafferaufnahme. Optional: 'waitfor <stunden>.\n" \
                  "'relais <1,2> <sekunden>': Schaltet das Relais <1,2> für <sekunden> ein.\n" \
                  "'$stats': gibt eine Übersicht über alle wichtigen Eckdaten des Raspberry Pi.\n" \
                  "'$stats -v': Wie $stats, aber ausführlichere infos.\n" \
