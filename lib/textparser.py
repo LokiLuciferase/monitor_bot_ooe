@@ -1,4 +1,5 @@
 import textwrap
+from time import sleep
 
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 
@@ -69,6 +70,7 @@ def divvy(msg):
             else:
                 comm, sph, ts = msg.split()
                 timestamp = lib.timelapse.start_timelapse(sph, ts)
+                sleep(1)
                 totaldur = round(((60 / int(sph)) * int(ts)), 3)
                 totaldur_h = round((totaldur / 60), 3)
                 std = Answer("Zeitraffer gestartet. Zeitsignatur: %s.\n"
