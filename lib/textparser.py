@@ -58,12 +58,12 @@ def divvy(msg):
         else:
             comm, sph, ts = msg.split()
             timestamp = lib.timelapse.start_timelapse(sph, ts)
-            totaldur = (60 / int(sph)) * int(ts)
-            std = Answer("Zeitraffer gestartet. Zeitsignatur: %s\n"
-                         "Gesamtdauer der Aufnahme: %s Minuten (=%s Stunden).\n"
-                         "Abrufen des fertigen Zeitrafferfilms mit 'timelapse retrieve'." % (timestamp, totaldur, totaldur / 60), "txt")
+            totaldur = round(((60 / int(sph)) * int(ts)), 3)
+            totaldur_h = round((totaldur / 60), 3)
+            std = Answer("Zeitraffer gestartet. Zeitsignatur: %s.\n"
+                         "Gesamtdauer der Aufnahme: %s min (= %s h).\n"
+                         "Abrufen des fertigen Zeitrafferfilms mit 'timelapse retrieve'." % (timestamp, totaldur, totaldur_h), "txt")
             # TODO: print ETA (timedelta?)
-
 
     elif msg.startswith('relais'):
         if len(msg.split()) != 3:
