@@ -1,5 +1,6 @@
 import os
 import threading
+from datetime import datetime, timedelta
 from time import sleep, time
 import subprocess
 
@@ -7,6 +8,8 @@ from lib.camcont import snap
 
 time_lapse_running = False
 hot_time_lapse = False
+endtimes = None
+
 
 # creates a thread which takes images at set intervals and ultimately returns a timelapse video
 class TimelapseThread(threading.Thread):
@@ -32,11 +35,14 @@ class TimelapseThread(threading.Thread):
 
 def timelapse(snaps_per_h, total_snaps, snaptime):
 
+    global endtimes
     boundedsnaps = snaps_per_h if (snaps_per_h < 360) else 360
     lapse_folder_name = "./data/timelapses/Timelapse_%s_sph_%s_total_%s" % (boundedsnaps, total_snaps, snaptime)
     if os.path.exists(lapse_folder_name):
         return lapse_folder_name
     os.makedirs(lapse_folder_name)
+    totaldur = round(((60 / int(snaps_per_h)) * int(total_snaps)), 3)
+    endtimes = datetime.now() + timedelta(minutes=totaldur+3)
 
     for times in range(total_snaps):
         try:
@@ -49,6 +55,8 @@ def timelapse(snaps_per_h, total_snaps, snaptime):
                      "-r", "25",
                      "-i", "{path}/lapse%03d.png".format(path=lapse_folder_name),
                      "-pix_fmt", "yuv420p", "./data/timelapses/%s.mp4" % snaptime])
+    endtimes = None
+
 
 def start_timelapse(sph, ts):
 

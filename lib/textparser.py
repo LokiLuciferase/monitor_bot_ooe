@@ -55,7 +55,10 @@ def divvy(msg):
             if lapsefile is not None:
                 std = Answer(lapsefile, "vid")
             else:
-                tlstatus = "Eine Aufnahme läuft momentan." if lib.timelapse.time_lapse_running else "Keine Aufnahme aktiv."
+                if lib.timelapse.time_lapse_running:
+                    tlstatus = "Eine Aufnahme läuft momentan. Erwartete Endzeit:\n%s" % str(lib.timelapse.endtimes)
+                else:
+                    tlstatus = "Keine Aufnahme aktiv."
                 std = Answer("Es wurde kein neues Zeitraffervideo gefunden. %s" % tlstatus, "txt")
         elif len(msg.split()) != 3:
             std = Answer("Die Zeitrafferfunktion benötigt folgende Argumente: timelapse <fotos pro stunde> <gesamtzahl>", "txt")
@@ -70,8 +73,10 @@ def divvy(msg):
                 totaldur_h = round((totaldur / 60), 3)
                 std = Answer("Zeitraffer gestartet. Zeitsignatur: %s.\n"
                              "Gesamtdauer der Aufnahme: %s min (= %s h).\n"
-                             "Abrufen des fertigen Zeitrafferfilms mit 'timelapse retrieve'." % (timestamp, totaldur, totaldur_h), "txt")
-                # TODO: print ETA (timedelta?)
+                             "Erwartete Endzeit:\n%s\n"
+                             "Abrufen des fertigen Zeitrafferfilms mit 'timelapse retrieve'." % (timestamp, totaldur,
+                                                                                                 totaldur_h,
+                                                                                                 str(lib.timelapse.endtimes)), "txt")
 
     elif msg.startswith('relais'):
         if len(msg.split()) != 3:
