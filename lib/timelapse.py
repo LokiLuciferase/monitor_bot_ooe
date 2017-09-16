@@ -47,7 +47,7 @@ def timelapse(snaps_per_h, total_snaps, snaptime):
         except:
             pass
         sleep(3600 // boundedsnaps)
-    subprocess.call(["ffmpeg", "-loglevel", "panic", "-r", "25", "-i", "{path}/lapse%03d.png".format(path=lapse_folder_name), "%s.mp4" % snaptime])
+    subprocess.call(["ffmpeg", "-loglevel", "panic", "-r", "25", "-i", "{path}/lapse%03d.png".format(path=lapse_folder_name), "./data/timelapses/%s.mp4" % snaptime])
 
 
 def start_timelapse(sph, ts):
