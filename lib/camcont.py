@@ -30,7 +30,7 @@ def vid(duration):
         cam.start_recording("%s.h264" % vidname)
         cam.wait_recording(duration)
         cam.stop_recording()
-    subprocess.call(["MP4Box", "-quiet", "-add", "%s.h264" % vidname, "%s.mp4" % vidname])
+    subprocess.call(["MP4Box", "-quiet", "-add", "%s.h264" % vidname, "%s.h264" % vidname])
     return "%s.mp4" % vidname
 
 
