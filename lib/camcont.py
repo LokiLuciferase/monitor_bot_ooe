@@ -10,7 +10,9 @@ def snap(namegiven=None, qual=None):
 
     picname = namegiven if (namegiven is not None) else "%s%s.png" % (SAVELOC, "-".join(str(time()).split(".")))
     with PiCamera() as cam:
-        if qual == 'hd':
+        if qual == 'sd':
+            cam.resolution = (1024, 768)
+        elif qual == 'hd':
             cam.resolution = (1920, 1080)
         elif qual == 'uhd':
             cam.resolution = (2592, 1944)

@@ -41,12 +41,14 @@ def timelapse(snaps_per_h, total_snaps, snaptime):
     for times in range(total_snaps):
         try:
             lapse_pic_name = "%s/lapse%s.png" % (lapse_folder_name, str(times + 1).zfill(3))
-            snap(lapse_pic_name, qual="uhd")
+            snap(lapse_pic_name, qual='sd')
         except:
             pass
         sleep(3600 // boundedsnaps)
-    subprocess.call(["ffmpeg", "-loglevel", "panic", "-r", "25", "-i", "{path}/lapse%03d.png".format(path=lapse_folder_name), "./data/timelapses/%s.h264" % snaptime])
-    subprocess.call(["MP4Box", "-quiet", "-add", "./data/timelapses/%s.h264" % snaptime, "./data/timelapses/%s.mp4" % snaptime])
+    subprocess.call(["ffmpeg", "-loglevel", "panic",
+                     "-r", "25",
+                     "-i", "{path}/lapse%03d.png".format(path=lapse_folder_name),
+                     "-pix_fmt", "yuv420p", "./data/timelapses/%s.mp4" % snaptime])
 
 def start_timelapse(sph, ts):
 
