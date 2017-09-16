@@ -21,11 +21,9 @@ class TimelapseThread(threading.Thread):
         global hot_time_lapse, time_lapse_running
         print("Starting time lapse photography in seperate thread.")
 
+        time_lapse_running = True
         if self.snaps_per_h > 60:
             hot_time_lapse = True
-
-        if self.snaps_per_h > 180:
-            time_lapse_running = True
 
         timelapse(self.snaps_per_h, self.total_snaps, self.snaptime)
         hot_time_lapse = False
