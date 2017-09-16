@@ -117,7 +117,7 @@ def divvy(fullmess):
     splitmsg = fullmess.split()
     calldic = {'photo': photocall, 'video': videocall,
                'timelapse': timelapsecall, 'relais': relaiscall,
-               'keyboard': keyboardcall, 'hife': call_for_help}
+               'keyboard': keyboardcall, 'hilfe': call_for_help}
 
     try:
         return calldic[splitmsg[0]](splitmsg)
