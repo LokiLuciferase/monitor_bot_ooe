@@ -57,7 +57,7 @@ def divvy(msg):
         else:
             comm, sph, ts = msg.split()
             timestamp = lib.timelapse.start_timelapse(sph, ts)
-            totaldur = (60 / sph) * ts
+            totaldur = (60 / int(sph)) * int(ts)
             std = Answer("Zeitraffer gestartet. Zeitsignatur: %s\n"
                          "Gesamtdauer der Aufnahme: %s Minuten (=%s Stunden).\n"
                          "Abrufen des fertigen Zeitrafferfilms mit 'timelapse retrieve'." % (timestamp, totaldur, totaldur / 60), "txt")
