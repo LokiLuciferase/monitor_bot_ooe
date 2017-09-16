@@ -29,74 +29,48 @@ class Answer:
 
 
 # divides text inputs from the user up and calls module functions
-def divvy(msg):
+def divvy(fullmess):
 
-    if msg[0] == '$':
-        std = Answer(macro(msg[1:]), "txt")
+    def photocall(msg):
+        try:
+            return Answer(snap(qual=msg[1]), 'image')
+        except IndexError:
+            return Answer(snap(), 'image')
 
-    elif msg.startswith('photo'):
-        if msg == 'photo hd':
-            std = Answer(snap(qual='uhd'), "image")
-        else:
-            std = Answer(snap(), "image")
+    def videocall(msg):
+        if not lib.timelapse.time_lapse_running:
+            return Answer(vid(int(msg[1])), 'vid')
+        return Answer("Eine Zeitrafferaufnahme läuft gerade. Videofunktion außer Kraft gesetzt.", 'txt')
 
-    elif msg.startswith('video'):
-        if len(msg.split()) < 2:
-            std = Answer("Die Videofunktion benötigt die Dauer des Videos in Sekunden.\n", "txt")
-        elif lib.timelapse.time_lapse_running:
-            std = Answer("Eine Zeitrafferaufnahme läuft gerade. Videofunktion außer Kraft gesetzt.", "txt")
-        else:
-            comm, dur = msg.split()
-            std = Answer(vid(int(dur)), "vid")
-
-    elif msg.startswith('timelapse'):
-
-        if msg == "timelapse retrieve":
+    def timelapsecall(msg):
+        if msg[1] == 'retrieve':
             lapsefile = lib.timelapse.get_timelapse()
             if lapsefile is not None:
-                std = Answer(lapsefile, "vid")
-            else:
-                if lib.timelapse.time_lapse_running:
-                    tlstatus = "Eine Aufnahme läuft momentan. Erwartete Endzeit (incl.Konversion):\n%s" % str(lib.timelapse.endtimes)
-                else:
-                    tlstatus = "Keine Aufnahme aktiv."
-                std = Answer("Es wurde kein neues Zeitraffervideo gefunden. %s" % tlstatus, "txt")
-        elif len(msg.split()) != 3:
-            std = Answer("Die Zeitrafferfunktion benötigt folgende Argumente: timelapse <fotos pro stunde> <gesamtzahl>", "txt")
-        else:
-
+                return Answer(lapsefile, "vid")
             if lib.timelapse.time_lapse_running:
-                std = Answer("Eine Zeitrafferaufnahme läuft bereits.", "txt")
+                tlstatus = "Eine Aufnahme läuft momentan. Erwartete Endzeit (incl.Konversion):\n%s" % str(
+                    lib.timelapse.endtimes)
             else:
-                comm, sph, ts = msg.split()
-                timestamp = lib.timelapse.start_timelapse(sph, ts)
-                sleep(1)
-                totaldur = round(((60 / int(sph)) * int(ts)), 3)
-                totaldur_h = round((totaldur / 60), 3)
-                std = Answer("Zeitraffer gestartet. Zeitsignatur: %s.\n"
-                             "Gesamtdauer der Aufnahme: %s min (= %s h).\n"
-                             "Erwartete Endzeit (incl. Konversion):\n%s\n"
-                             "Abrufen des fertigen Zeitrafferfilms mit 'timelapse retrieve'." % (timestamp, totaldur,
-                                                                                                 totaldur_h,
-                                                                                                 str(lib.timelapse.endtimes)), "txt")
+                tlstatus = "Keine Aufnahme aktiv."
+            return Answer("Es wurde kein neues Zeitraffervideo gefunden. %s" % tlstatus, 'txt')
 
-    elif msg.startswith('relais'):
-        if len(msg.split()) != 3:
-            std = Answer("Funktionsweise: Relais <1,2> <sekundenzahl oder 'inf'>", "txt")
-        else:
-            comm, relid, dur = msg.split()
-            activate_relais(relid, dur)
-            std = Answer("Relais geschaltet.", "txt")
+        if not lib.timelapse.time_lapse_running:
+            timestamp = lib.timelapse.start_timelapse(msg[1], msg[2])
+            sleep(1)
+            totaldur = round(((60 / int(msg[1])) * int(msg[2])), 3)
+            runmess = "Zeitraffer gestartet. Zeitsignatur: %s.\n" \
+                      "Gesamtdauer der Aufnahme: %s min.\n" \
+                      "Erwartete Endzeit (incl. Konversion):\n%s\n" \
+                      "Abrufen des fertigen Zeitrafferfilms mit 'timelapse retrieve'." % (timestamp, totaldur,
+                                                                                          str(lib.timelapse.endtimes))
+            return Answer(runmess, 'txt')
+        return Answer("Eine Zeitrafferaufnahme läuft bereits.", "txt")
 
-    elif msg.startswith("keyboard"):
-        boards = {"admin": admin, "AV": auvi, "relais": rels}
-        try:
-            returnkb = boards[msg.split()[1]]
-            std = Answer("Keyboard aktiviert.", "txt", keys=returnkb)
-        except KeyError:
-            std = Answer("Unbekanntes Keyboard.", "txt")
+    def relaiscall(msg):
+        activate_relais(msg[1], msg[2])
+        return Answer("Relais geschaltet.", "txt")
 
-    elif msg == "hilfe":
+    def call_for_help(msg):
         tirade = "Dies ist der PiMonitorBot.\nFunktionen (ohne Anführungszeichen eingeben):\n" \
                  "'photo': Schießt ein Foto und sendet es. Optional: zusätzliches Argument 'hd' für HD Foto.\n" \
                  "'video <sekunden>': Schießt ein Video von <sekunden> Länge und sendet es.\n" \
@@ -105,12 +79,52 @@ def divvy(msg):
                  "'$stats': gibt eine Übersicht über alle wichtigen Eckdaten des Raspberry Pi.\n" \
                  "'$stats -v': Wie $stats, aber ausführlichere infos.\n" \
                  "Alle anderen Kommandos werden als shell commands für den RPi interpretiert.\n"
-        std = Answer(tirade, "txt")
-        
-    else:
-        std = Answer(chaincall(msg), "txt")
+        return Answer(tirade, "txt")
 
-    return std
+    def keyboardcall(msg):
+
+        admin = ReplyKeyboardMarkup(keyboard=[
+            [KeyboardButton(text='$exceptions'), KeyboardButton(text='$stats')],
+            [KeyboardButton(text='$historylog'), KeyboardButton(text='$errorlog')],
+            [KeyboardButton(text='$update'), KeyboardButton(text='$clean'), KeyboardButton(text='$reboot')],
+            [KeyboardButton(text='keyboard AV'), KeyboardButton(text='keyboard relais')]
+        ])
+
+        auvi = ReplyKeyboardMarkup(keyboard=[
+            [KeyboardButton(text='photo')],
+            [KeyboardButton(text='video 5'), KeyboardButton(text='video 10')],
+            [KeyboardButton(text='video 30'), KeyboardButton(text='video 60')],
+            [KeyboardButton(text='timelapse retrieve')]
+        ])
+
+        rels = ReplyKeyboardMarkup(keyboard=[
+            [KeyboardButton(text='relais 1 1'), KeyboardButton(text='relais 2 1')],
+            [KeyboardButton(text='relais 1 5'), KeyboardButton(text='relais 2 5')],
+            [KeyboardButton(text='relais 1 20'), KeyboardButton(text='relais 2 20')],
+            [KeyboardButton(text='relais 1 inf'), KeyboardButton(text='relais 2 inf')],
+        ])
+
+        boards = {"admin": admin, "AV": auvi, "relais": rels}
+        try:
+            return Answer("Keyboard aktiviert.", "txt", keys=boards[msg[1]])
+        except KeyError:
+            return Answer("Unbekanntes Keyboard.", "txt")
+
+
+    if fullmess[0] == '$':
+        return Answer(macro(fullmess[1:]), "txt")
+
+    splitmsg = fullmess.split()
+    calldic = {'photo': photocall, 'video': videocall,
+               'timelapse': timelapsecall, 'relais': relaiscall,
+               'keyboard': keyboardcall, 'hife': call_for_help}
+
+    try:
+        return calldic[splitmsg[0]](splitmsg)
+    except KeyError:
+        return Answer(chaincall(fullmess), "txt")
+    except IndexError:
+        return Answer("Falsche Anzahl von Argumenten gegeben. Für Hilfe 'hilfe' eingeben.", 'txt')
 
 
 def macro(querystring):
@@ -146,23 +160,4 @@ def macro(querystring):
 
 # ReplyMarkupKeyboard definitions here
 
-admin = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text='$exceptions'), KeyboardButton(text='$stats')],
-    [KeyboardButton(text='$historylog'), KeyboardButton(text='$errorlog')],
-    [KeyboardButton(text='$update'), KeyboardButton(text='$clean'), KeyboardButton(text='$reboot')],
-    [KeyboardButton(text='keyboard AV'), KeyboardButton(text='keyboard relais')]
-])
 
-auvi = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text='photo')],
-    [KeyboardButton(text='video 5'), KeyboardButton(text='video 10')],
-    [KeyboardButton(text='video 30'), KeyboardButton(text='video 60')],
-    [KeyboardButton(text='timelapse retrieve')]
-])
-
-rels = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text='relais 1 1'), KeyboardButton(text='relais 2 1')],
-    [KeyboardButton(text='relais 1 5'), KeyboardButton(text='relais 2 5')],
-    [KeyboardButton(text='relais 1 20'), KeyboardButton(text='relais 2 20')],
-    [KeyboardButton(text='relais 1 inf'), KeyboardButton(text='relais 2 inf')],
-])

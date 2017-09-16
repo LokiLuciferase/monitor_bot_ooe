@@ -118,3 +118,4 @@ ENV/
 *.xml
 logs/
 !/lib/timelapse.py
+!/lib/queries.py
