@@ -117,3 +117,4 @@ ENV/
 !/logs/.empty
 *.xml
 logs/
+!/lib/timelapse.py
