@@ -35,7 +35,7 @@ def divvy(msg):
 
     elif msg.startswith('photo'):
         if msg == 'photo hd':
-            std = Answer(snap(hd=True), "image")
+            std = Answer(snap(qual='uhd'), "image")
         else:
             std = Answer(snap(), "image")
 
@@ -91,7 +91,7 @@ def divvy(msg):
 
     elif msg == "hilfe":
         tirade = "Dies ist der PiMonitorBot.\nFunktionen (ohne Anführungszeichen eingeben):\n" \
-                 "'photo': Schießt ein Foto und sendet es\n" \
+                 "'photo': Schießt ein Foto und sendet es. Optional: zusätzliches Argument 'hd' für HD Foto.\n" \
                  "'video <sekunden>': Schießt ein Video von <sekunden> Länge und sendet es.\n" \
                  "'timelapse <photos_pro_h> <gesamtzahl_photos>': Zeitrafferaufnahme.\n" \
                  "'relais <1,2> <sekunden>': Schaltet das Relais <1,2> für <sekunden> ein.\n" \
