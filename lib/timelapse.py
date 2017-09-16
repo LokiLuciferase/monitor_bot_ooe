@@ -37,14 +37,16 @@ class TimelapseThread(threading.Thread):
 def timelapse(snaps_per_h, total_snaps, snaptime, waitfor):
 
     global endtimes
-    sleep((waitfor * 3600) + 1)
+
     boundedsnaps = snaps_per_h if (snaps_per_h < 360) else 360
     lapse_folder_name = "./data/timelapses/Timelapse_%s_sph_%s_total_%s" % (boundedsnaps, total_snaps, snaptime)
     if os.path.exists(lapse_folder_name):
         return lapse_folder_name
     os.makedirs(lapse_folder_name)
     totaldur = round(((60 / int(boundedsnaps)) * int(total_snaps)), 3)
-    endtimes = datetime.now() + timedelta(minutes=totaldur*1.2)
+    waitfor_sec = (waitfor * 3600) + 1
+    endtimes = datetime.now() + timedelta(minutes=totaldur*1.2) + timedelta(seconds=waitfor_sec)
+    sleep(waitfor_sec)
 
     for times in range(total_snaps):
         try:
