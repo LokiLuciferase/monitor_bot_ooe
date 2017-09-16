@@ -51,7 +51,8 @@ def divvy(msg):
             if lapsefile is not None:
                 std = Answer(lapsefile, "vid")
             else:
-                std = Answer("Es wurde kein neues Zeitraffervideo gefunden.", "txt")
+                tlstatus = "Eine Aufnahme läuft momentan." if lib.timelapse.time_lapse_running else "Keine Aufnahme aktiv."
+                std = Answer("Es wurde kein neues Zeitraffervideo gefunden. %s" % tlstatus, "txt")
         elif len(msg.split()) != 3:
             std = Answer("Die Zeitrafferfunktion benötigt folgende Argumente: timelapse <fotos pro stunde> <gesamtzahl>", "txt")
         else:
@@ -61,6 +62,8 @@ def divvy(msg):
             std = Answer("Zeitraffer gestartet. Zeitsignatur: %s\n"
                          "Gesamtdauer der Aufnahme: %s Minuten (=%s Stunden).\n"
                          "Abrufen des fertigen Zeitrafferfilms mit 'timelapse retrieve'." % (timestamp, totaldur, totaldur / 60), "txt")
+            # TODO: print ETA (timedelta?)
+
 
     elif msg.startswith('relais'):
         if len(msg.split()) != 3:
@@ -82,6 +85,7 @@ def divvy(msg):
         tirade = "Dies ist der PiMonitorBot.\nFunktionen (ohne Anführungszeichen eingeben):\n" \
                  "'photo': Schießt ein Foto und sendet es\n" \
                  "'video <sekunden>': Schießt ein Video von <sekunden> Länge und sendet es.\n" \
+                 "'timelapse <photos_pro_h> <gesamtzahl_photos>': Zeitrafferaufnahme.\n" \
                  "'relais <1,2> <sekunden>': Schaltet das Relais <1,2> für <sekunden> ein.\n" \
                  "'$stats': gibt eine Übersicht über alle wichtigen Eckdaten des Raspberry Pi.\n" \
                  "'$stats -v': Wie $stats, aber ausführlichere infos.\n" \
@@ -125,13 +129,15 @@ def macro(querystring):
 admin = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='$exceptions'), KeyboardButton(text='$stats -v')],
     [KeyboardButton(text='$historylog'), KeyboardButton(text='$errorlog')],
-    [KeyboardButton(text='$update'), KeyboardButton(text='$clean'), KeyboardButton(text='$reboot')]
+    [KeyboardButton(text='$update'), KeyboardButton(text='$clean'), KeyboardButton(text='$reboot')],
+    [KeyboardButton(text='keyboard AV'), KeyboardButton(text='keyboard relais')]
 ])
 
 auvi = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='photo')],
     [KeyboardButton(text='video 5'), KeyboardButton(text='video 10')],
-    [KeyboardButton(text='video 30'), KeyboardButton(text='video 60')]
+    [KeyboardButton(text='video 30'), KeyboardButton(text='video 60')],
+    [KeyboardButton(text='timelapse retrieve')]
 ])
 
 rels = ReplyKeyboardMarkup(keyboard=[
