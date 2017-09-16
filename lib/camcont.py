@@ -10,9 +10,10 @@ def snap(namegiven=None):
 
     picname = namegiven if (namegiven is not None) else "%s%s.png" % (SAVELOC, "-".join(str(time()).split(".")))
     with PiCamera() as cam:
+        cam.resolution = (1920, 1080)
+        cam.rotation = 180
         cam.start_preview()
         sleep(2)
-        cam.rotation = 180
         cam.capture(picname)
         cam.stop_preview()
     return picname
@@ -23,8 +24,8 @@ def vid(duration):
 
     vidname = "%s%s" % (SAVELOC, "-".join(str(time()).split(".")))
     with PiCamera() as cam:
+        cam.resolution = (1296, 972)
         cam.rotation = 180
-        cam.resolution = (1024, 768)
         cam.start_preview()
         sleep(2)
         cam.start_recording("%s.h264" % vidname)
@@ -32,5 +33,3 @@ def vid(duration):
         cam.stop_recording()
     subprocess.call(["MP4Box", "-quiet", "-add", "%s.h264" % vidname, "%s.mp4" % vidname])
     return "%s.mp4" % vidname
-
-
