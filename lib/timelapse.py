@@ -41,7 +41,7 @@ def timelapse(snaps_per_h, total_snaps, snaptime):
     for times in range(total_snaps):
         try:
             lapse_pic_name = "%s/lapse%s.png" % (lapse_folder_name, str(times + 1).zfill(3))
-            snap(lapse_pic_name)
+            snap(lapse_pic_name, hd=True)
         except:
             pass
         sleep(3600 // boundedsnaps)

@@ -6,11 +6,12 @@ SAVELOC = '/home/pi/scripts/monitor_bot_ooe/data/snaps/'
 
 
 # Takes a picture with PiCamera
-def snap(namegiven=None):
+def snap(namegiven=None, hd=False):
 
     picname = namegiven if (namegiven is not None) else "%s%s.png" % (SAVELOC, "-".join(str(time()).split(".")))
     with PiCamera() as cam:
-        cam.resolution = (1920, 1080)
+        if hd:
+            cam.resolution = (1920, 1080)
         cam.rotation = 180
         cam.start_preview()
         sleep(2)

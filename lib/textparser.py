@@ -33,8 +33,11 @@ def divvy(msg):
     if msg[0] == '$':
         std = Answer(macro(msg[1:]), "txt")
 
-    elif msg == 'photo':
-        std = Answer(snap(), "image")
+    elif msg.startswith('photo'):
+        if msg == 'photo hd':
+            std = Answer(snap(hd=True), "image")
+        else:
+            std = Answer(snap(), "image")
 
     elif msg.startswith('video'):
         if len(msg.split()) < 2:
@@ -115,12 +118,17 @@ def macro(querystring):
                 "historylog"  : "tail -30 logs/history.log",
                 "errorlog"    : "tail -30 logs/monitorlog.log",
                 "update"      : "scripts/update.sh",
-                "clean"       : "rm data/snaps/*",
                 "reboot"      : "sudo reboot now"
                 }
 
     if querystring == "macros":
         return "Existierende Makros:\n" + "".join(["%s : %s\n" % (x, y) for x, y in macrodic.items()])
+
+    if querystring == "clean":
+        if lib.timelapse.time_lapse_running:
+            return chaincall("rm data/snaps/*")
+        else:
+            return chaincall("rm data/snaps/* && rm -rf data/timelapses/*")
 
     try:
         answer = macrodic[querystring]
@@ -132,7 +140,7 @@ def macro(querystring):
 # ReplyMarkupKeyboard definitions here
 
 admin = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text='$exceptions'), KeyboardButton(text='$stats -v')],
+    [KeyboardButton(text='$exceptions'), KeyboardButton(text='$stats')],
     [KeyboardButton(text='$historylog'), KeyboardButton(text='$errorlog')],
     [KeyboardButton(text='$update'), KeyboardButton(text='$clean'), KeyboardButton(text='$reboot')],
     [KeyboardButton(text='keyboard AV'), KeyboardButton(text='keyboard relais')]
