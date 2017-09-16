@@ -42,7 +42,7 @@ def timelapse(snaps_per_h, total_snaps, snaptime):
         return lapse_folder_name
     os.makedirs(lapse_folder_name)
     totaldur = round(((60 / int(snaps_per_h)) * int(total_snaps)), 3)
-    endtimes = datetime.now() + timedelta(minutes=totaldur+3)
+    endtimes = datetime.now() + timedelta(minutes=totaldur*1.2)
 
     for times in range(total_snaps):
         try:
