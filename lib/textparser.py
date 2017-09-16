@@ -2,8 +2,9 @@ import textwrap
 
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 
+import lib.timelapse
 from lib.processor import chaincall
-from lib.camcont import snap, vid, start_timelapse
+from lib.camcont import snap, vid
 from lib.relaiscont import activate_relais
 
 
@@ -38,17 +39,28 @@ def divvy(msg):
     elif msg.startswith('video'):
         if len(msg.split()) < 2:
             std = Answer("Die Videofunktion benötigt die Dauer des Videos in Sekunden.\n", "txt")
+        elif lib.timelapse.time_lapse_running:
+            std = Answer("Eine Zeitrafferaufnahme läuft gerade. Videofunktion außer Kraft gesetzt.", "txt")
         else:
             comm, dur = msg.split()
             std = Answer(vid(int(dur)), "vid")
 
     elif msg.startswith('timelapse'):
-        if len(msg.split()) != 3:
+        if msg == "timelapse retrieve":
+            lapsefile = lib.timelapse.get_timelapse()
+            if lapsefile is not None:
+                std = Answer(lapsefile, "vid")
+            else:
+                std = Answer("Es wurde kein neues Zeitraffervideo gefunden.", "txt")
+        elif len(msg.split()) != 3:
             std = Answer("Die Zeitrafferfunktion benötigt folgende Argumente: timelapse <fotos pro stunde> <gesamtzahl>", "txt")
         else:
             comm, sph, ts = msg.split()
-            timestamp = start_timelapse(sph, ts)
-            std = Answer("Zeitraffer gestartet. Zeitsignatur: %s" % timestamp, "txt")
+            timestamp = lib.timelapse.start_timelapse(sph, ts)
+            totaldur = (60 / sph) * ts
+            std = Answer("Zeitraffer gestartet. Zeitsignatur: %s\n"
+                         "Gesamtdauer der Aufnahme: %s Minuten (=%s Stunden).\n"
+                         "Abrufen des fertigen Zeitrafferfilms mit 'timelapse retrieve'." % (timestamp, totaldur, totaldur / 60), "txt")
 
     elif msg.startswith('relais'):
         if len(msg.split()) != 3:
