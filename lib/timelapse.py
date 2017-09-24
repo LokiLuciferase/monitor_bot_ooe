@@ -11,6 +11,7 @@ hot_time_lapse = False
 endtimes = None
 
 
+# creates a thread which takes images at set intervals and ultimately returns a timelapse video
 class TimelapseThread(threading.Thread):
 
     def __init__(self, snaps_per_h, total_snaps, snaptime, delay):
@@ -50,7 +51,7 @@ def timelapse(snaps_per_h, total_snaps, snaptime, waitfor):
     for times in range(total_snaps):
         try:
             lapse_pic_name = "%s/lapse%s.png" % (lapse_folder_name, str(times + 1).zfill(3))
-            snap(lapse_pic_name, qual='sd', ts=True)
+            snap(lapse_pic_name, qual='sd')
         except:
             pass
         sleep(3600 // boundedsnaps)

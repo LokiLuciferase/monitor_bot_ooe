@@ -32,17 +32,10 @@ class Answer:
 def divvy(fullmess):
 
     def photocall(msg):
-
-        timestamp = True if "ts" in msg else False
-        mode = "night" if "night" in msg else "default"
         try:
-            if len(msg) == 1:
-                return Answer(snap(), 'image')
-            else:
-                return Answer(snap(ts=timestamp, mode=mode, qual=msg[1]), 'image')
+            return Answer(snap(qual=msg[1]), 'image')
         except IndexError:
-            return Answer(snap(ts=timestamp, mode=mode), 'image',
-                          comments="An error occured in photocall. Using default settings.")
+            return Answer(snap(), 'image')
 
     def videocall(msg):
         if not lib.timelapse.time_lapse_running:
