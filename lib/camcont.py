@@ -8,6 +8,7 @@ SAVELOC = '/home/pi/scripts/monitor_bot_ooe/data/snaps/'
 # Takes a picture with PiCamera
 def snap(namegiven=None, qual=None):
 
+
     picname = namegiven if (namegiven is not None) else "%s%s.png" % (SAVELOC, "-".join(str(time()).split(".")))
     with PiCamera() as cam:
         if qual == 'sd':
