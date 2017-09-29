@@ -40,7 +40,7 @@ def divvy(fullmess):
                 return Answer(snap(), 'image')
             else:
                 return Answer(snap(ts=timestamp, mode=mode, qual=msg[1]), 'image')
-        except IndexError:
+        except:
             return Answer(snap(ts=timestamp, mode=mode), 'image',
                           comments="An error occured in photocall. Using default settings.")
 
