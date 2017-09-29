@@ -46,6 +46,7 @@ def timelapse(snaps_per_h, total_snaps, snaptime, waitfor):
     totaldur = round(((60 / int(boundedsnaps)) * int(total_snaps)), 3)
     waitfor_sec = (waitfor * 3600) + 1
     endtimes = datetime.now() + timedelta(minutes=totaldur*1.2) + timedelta(seconds=waitfor_sec)
+    endtimes = endtimes.strftime('%Y-%m-%d %H:%M')
     sleep(waitfor_sec)
 
     for times in range(total_snaps):
