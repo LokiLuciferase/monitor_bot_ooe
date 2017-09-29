@@ -82,7 +82,8 @@ def divvy(fullmess):
 
     def call_for_help(msg):
         tirade = "Dies ist der PiMonitorBot.\nFunktionen (ohne Anführungszeichen eingeben):\n" \
-                 "'photo': Schießt ein Foto und sendet es. Optional: zusätzliches Argument 'hd' für HD Foto.\n" \
+                 "'photo': Schießt ein Foto und sendet es. " \
+                 "Optional: zusätzliches Argument 'hd' für HD Foto, 'ts' für Zeitstempel und 'night' für Nachtaufnahme.\n" \
                  "'video <sekunden>': Schießt ein Video von <sekunden> Länge und sendet es.\n" \
                  "'timelapse <photos_pro_h> <gesamtzahl_photos>': Zeitrafferaufnahme. Optional: 'waitfor <stunden>.\n" \
                  "'relais <1,2> <sekunden>': Schaltet das Relais <1,2> für <sekunden> ein.\n" \
