@@ -1,10 +1,10 @@
-from picamera import PiCamera
+from picamera import PiCamera, Color
 from time import sleep, time
 from datetime import datetime
 import subprocess
 from fractions import Fraction
 
-SAVELOC = '/home/pi/scripts/monitor_bot_ooe/data/snaps/'
+SAVELOC = './data/snaps/'
 
 
 # Takes a picture with PiCamera
@@ -18,7 +18,7 @@ def snap(namegiven=None, qual='hd', ts=False, mode='default'):
         cam.resolution = qualdic[qual]
 
         if ts:
-            cam.annotate_background = cam.Color('black')
+            cam.annotate_background = Color('black')
             cam.annotate_text = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         if mode == 'night':
