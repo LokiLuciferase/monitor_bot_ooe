@@ -37,7 +37,7 @@ def queries(bot, chat_id, username, txtmess):
         print("Video: %s" % say.payload)
         with open(say.payload, "rb") as vid:
             bot.sendVideo(chat_id, vid)
-            os.remove(say.payload)
+            #os.remove(say.payload)
 
     if say.comments:
         print("Comments: '%s'" % say.comments)
