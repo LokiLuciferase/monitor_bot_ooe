@@ -1,3 +1,4 @@
+import os
 import textwrap
 from time import sleep
 
@@ -32,7 +33,7 @@ class Answer:
 def divvy(fullmess):
 
     def photocall(msg):
-
+        os.makedirs("./data/snaps", exist_ok=True)
         timestamp = True if "ts" in msg else False
         mode = "night" if "night" in msg else "default"
         try:
@@ -45,11 +46,13 @@ def divvy(fullmess):
                           comments="An error occured in photocall. Using default settings.")
 
     def videocall(msg):
+        os.makedirs("./data/snaps", exist_ok=True)
         if not lib.timelapse.time_lapse_running:
             return Answer(vid(int(msg[1])), 'vid')
         return Answer("Eine Zeitrafferaufnahme läuft gerade. Videofunktion außer Kraft gesetzt.", 'txt')
 
     def timelapsecall(msg):
+        os.makedirs("./data/timelapses", exist_ok=True)
         if msg[1] == 'retrieve':
             lapsefile = lib.timelapse.get_timelapse()
             if lapsefile is not None:

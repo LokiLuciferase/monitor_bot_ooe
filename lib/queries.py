@@ -34,10 +34,14 @@ def queries(bot, chat_id, username, txtmess):
             bot.sendPhoto(chat_id, pic)
 
     elif say.type == 'vid':
+        os.makedirs("./data/old_videos/", exist_ok=True)
         print("Video: %s" % say.payload)
         with open(say.payload, "rb") as vid:
             bot.sendVideo(chat_id, vid)
-            #os.remove(say.payload)
+
+            # get payload file name and move to old_videos dir
+            fn = os.path.basename(say.payload)
+            os.rename(say.payload, "./data/old_videos/%s" % fn)
 
     if say.comments:
         print("Comments: '%s'" % say.comments)
