@@ -5,11 +5,10 @@ import time
 import telepot
 from telepot.loop import MessageLoop
 
-from data.tokens import pimonitor_token
+from data.tokens import TOKEN
 from lib.queries import queries
 
 sys.path.insert(0, sys.path[0])
-TOKEN = pimonitor_token
 
 
 def main():
