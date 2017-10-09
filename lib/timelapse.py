@@ -14,12 +14,13 @@ endtimes = None
 # creates a thread which takes images at set intervals and ultimately returns a timelapse video
 class TimelapseThread(threading.Thread):
 
-    def __init__(self, snaps_per_h, total_snaps, snaptime, delay):
+    def __init__(self, snaps_per_h, total_snaps, snaptime, delay, fps):
         super(TimelapseThread, self).__init__()
         self.snaps_per_h = int(snaps_per_h)
         self.total_snaps = int(total_snaps)
         self.snaptime = snaptime
         self.delay = delay
+        self.fps = str(fps)
 
     def run(self):
         global hot_time_lapse, time_lapse_running
@@ -29,12 +30,12 @@ class TimelapseThread(threading.Thread):
         if self.snaps_per_h > 60:
             hot_time_lapse = True
 
-        timelapse(self.snaps_per_h, self.total_snaps, self.snaptime, self.delay)
+        timelapse(self.snaps_per_h, self.total_snaps, self.snaptime, self.delay, self.fps)
         hot_time_lapse = False
         time_lapse_running = False
 
 
-def timelapse(snaps_per_h, total_snaps, snaptime, waitfor):
+def timelapse(snaps_per_h, total_snaps, snaptime, waitfor, fps):
 
     global endtimes
 
@@ -57,16 +58,16 @@ def timelapse(snaps_per_h, total_snaps, snaptime, waitfor):
             pass
         sleep(3600 // boundedsnaps)
     subprocess.call(["ffmpeg", "-loglevel", "panic",
-                     "-r", "25",
+                     "-framerate", fps,
                      "-i", "{path}/lapse%03d.png".format(path=lapse_folder_name),
                      "-pix_fmt", "yuv420p", "./data/timelapses/%s.mp4" % snaptime])
     endtimes = None
 
 
-def start_timelapse(sph, ts, waitfor):
+def start_timelapse(sph, ts, waitfor, fps="25"):
 
     st = "-".join(str(time()).split("."))
-    tt = TimelapseThread(sph, ts, st, waitfor)
+    tt = TimelapseThread(sph, ts, st, waitfor, fps)
     tt.start()
     return st
 

@@ -8,6 +8,8 @@ from lib.textparser import divvy
 
 def queries(bot, chat_id, username, txtmess):
 
+    print("Text message from @%s reading '%s'" % (username, txtmess))
+
     with open("./logs/history.log", "a") as logfile:
         if username not in valid_users:
             intrudermess = "INTRUDER detected. Username: %s. Message: %s" % (username, txtmess)
@@ -15,7 +17,6 @@ def queries(bot, chat_id, username, txtmess):
             logfile.write(intrudermess)
         logfile.write("[%s] %s: %s\n" % (datetime.now(), username, txtmess))
 
-    print("Text message from @%s reading '%s'" % (username, txtmess))
     say = divvy(txtmess)
 
     if say.type == 'txt':
@@ -38,10 +39,7 @@ def queries(bot, chat_id, username, txtmess):
         print("Video: %s" % say.payload)
         with open(say.payload, "rb") as vid:
             bot.sendVideo(chat_id, vid)
-
-            # get payload file name and move to old_videos dir
-            fn = os.path.basename(say.payload)
-            os.rename(say.payload, "./data/old_videos/%s" % fn)
+            os.rename(say.payload, "./data/old_videos/%s" % os.path.basename(say.payload))
 
     if say.comments:
         print("Comments: '%s'" % say.comments)

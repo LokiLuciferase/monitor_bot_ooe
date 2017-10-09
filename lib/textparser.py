@@ -65,10 +65,11 @@ def divvy(fullmess):
             return Answer("Es wurde kein neues Zeitraffervideo gefunden. %s" % tlstatus, 'txt')
 
         if not lib.timelapse.time_lapse_running:
-            delay = 0
-            if len(msg) == 5 and msg[3] == "waitfor":  # rework this at some point
-                delay = int(msg[4])
-            timestamp = lib.timelapse.start_timelapse(msg[1], msg[2], delay)
+
+            delay = msg[msg.index("waitfor") + 1] if "waitfor" in msg else 0
+            fpers = msg[msg.index("fps") + 1] if "fps" in msg else "25"
+
+            timestamp = lib.timelapse.start_timelapse(msg[1], msg[2], delay, fpers)
             sleep(1)
             totaldur = round(((60 / int(msg[1])) * int(msg[2])), 3)
             runmess = "Zeitraffer gestartet. Zeitsignatur: %s.\n" \
