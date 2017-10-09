@@ -66,16 +66,26 @@ def divvy(fullmess):
 
         if not lib.timelapse.time_lapse_running:
 
+            if len(msg) % 2 != 0:
+                pph = int(msg[1])
+                ptot = int(msg[2])
+            else:
+                pph = 200  # allow for 200 photos per hour as default. Rather play with fps
+                ptot = int(msg[1]) * pph  # make length of timelapse directly settable
+
             delay = msg[msg.index("waitfor") + 1] if "waitfor" in msg else 0
             fpers = msg[msg.index("fps") + 1] if "fps" in msg else "25"
 
-            timestamp = lib.timelapse.start_timelapse(msg[1], msg[2], delay, fpers)
+            if not 20 <= int(fpers) <= 80:
+                return Answer("Abbruch. Gültige FPS settings: 20 - 80 FPS", "txt")
+            timestamp = lib.timelapse.start_timelapse(pph, ptot, delay, fpers)
             sleep(1)
-            totaldur = round(((60 / int(msg[1])) * int(msg[2])), 3)
+            totaldur = round(((60 / pph) * ptot), 3)
             runmess = "Zeitraffer gestartet. Zeitsignatur: %s.\n" \
                       "Gesamtdauer der Aufnahme: %s min.\n" \
-                      "Erwartete Endzeit (incl. Konversion):\n%s\n" \
-                      "Abrufen des fertigen Zeitrafferfilms mit 'timelapse retrieve'." % (timestamp, totaldur,
+                      "Frames per Sekunde (Ausgabevideo): %s.\n" \
+                      "Geschätzte Endzeit (incl. Konversion):\n%s\n" \
+                      "Abrufen des fertigen Zeitrafferfilms mit 'timelapse retrieve'." % (timestamp, totaldur, fpers,
                                                                                           str(lib.timelapse.endtimes))
             return Answer(runmess, 'txt')
         return Answer("Eine Zeitrafferaufnahme läuft bereits.", "txt")
@@ -86,10 +96,14 @@ def divvy(fullmess):
 
     def call_for_help(msg):
         tirade = "Dies ist der PiMonitorBot.\nFunktionen (ohne Anführungszeichen eingeben):\n" \
+                 "'Keyboard AV': aktiviert ein Keyboard zur Bedienung der Kamerafunktionen.\n" \
                  "'photo': Schießt ein Foto und sendet es. " \
-                 "Optional: zusätzliches Argument 'hd' für HD Foto, 'ts' für Zeitstempel und 'night' für Nachtaufnahme.\n" \
+                 "Optional: zusätzliches Argument 'hd' für HD Foto, 'ts' für Zeitstempel, 'night' für Nachtaufnahme.\n" \
                  "'video <sekunden>': Schießt ein Video von <sekunden> Länge und sendet es.\n" \
-                 "'timelapse <photos_pro_h> <gesamtzahl_photos>': Zeitrafferaufnahme. Optional: 'waitfor <stunden>.\n" \
+                 "'timelapse <photos_pro_h> <gesamtzahl_photos>': Zeitrafferaufnahme. \n" \
+                 "Alternative (moderne) Syntax: timelapse <dauer_stunden>.\n" \
+                 "Optional: 'waitfor <stunden>': Stunden bis Aufnahme startet.\n" \
+                 "Optional: 'fps <ausgabe-fps>': FPS des Ausgabevideos.\n" \
                  "'relais <1,2> <sekunden>': Schaltet das Relais <1,2> für <sekunden> ein.\n" \
                  "'$stats': gibt eine Übersicht über alle wichtigen Eckdaten des Raspberry Pi.\n" \
                  "'$stats -v': Wie $stats, aber ausführlichere infos.\n" \
@@ -107,8 +121,8 @@ def divvy(fullmess):
 
         auvi = ReplyKeyboardMarkup(keyboard=[
             [KeyboardButton(text='photo')],
-            [KeyboardButton(text='video 5'), KeyboardButton(text='video 10')],
-            [KeyboardButton(text='video 30'), KeyboardButton(text='video 60')],
+            [KeyboardButton(text='video 10'), KeyboardButton(text='video 60')],
+            [KeyboardButton(text='timelapse 2'), KeyboardButton(text='timelapse 10 fps 70')],
             [KeyboardButton(text='timelapse retrieve')]
         ])
 
@@ -124,7 +138,6 @@ def divvy(fullmess):
             return Answer("Keyboard aktiviert.", "txt", keys=boards[msg[1]])
         except KeyError:
             return Answer("Unbekanntes Keyboard.", "txt")
-
 
     if fullmess[0] == '$':
         return Answer(macro(fullmess[1:]), "txt")
