@@ -39,12 +39,11 @@ def timelapse(snaps_per_h, total_snaps, snaptime, waitfor, fps):
 
     global endtimes
 
-    boundedsnaps = snaps_per_h if (snaps_per_h < 360) else 360
-    lapse_folder_name = "./data/timelapses/Timelapse_%s_sph_%s_total_%s" % (boundedsnaps, total_snaps, snaptime)
+    lapse_folder_name = "./data/timelapses/Timelapse_%s_sph_%s_total_%s" % (snaps_per_h, total_snaps, snaptime)
     if os.path.exists(lapse_folder_name):
         return lapse_folder_name
     os.makedirs(lapse_folder_name)
-    totaldur = round(((60 / int(boundedsnaps)) * int(total_snaps)), 3)
+    totaldur = round(((60 / int(snaps_per_h)) * int(total_snaps)), 3)
     waitfor_sec = (waitfor * 3600) + 1
     endtimes = datetime.now() + timedelta(minutes=totaldur*1.2) + timedelta(seconds=waitfor_sec)
     endtimes = endtimes.strftime('%Y-%m-%d %H:%M')
@@ -56,7 +55,7 @@ def timelapse(snaps_per_h, total_snaps, snaptime, waitfor, fps):
             snap(lapse_pic_name, qual='sd', ts=True)
         except:
             pass
-        sleep(3600 // boundedsnaps)
+        sleep(3600 // snaps_per_h)
     subprocess.call(["ffmpeg", "-loglevel", "panic",
                      "-framerate", fps,
                      "-i", "{path}/lapse%03d.png".format(path=lapse_folder_name),

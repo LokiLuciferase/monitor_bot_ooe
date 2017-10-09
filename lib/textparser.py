@@ -9,6 +9,11 @@ from lib.processor import chaincall
 from lib.camcont import snap, vid
 from lib.relaiscont import activate_relais
 
+TIMELAPSE_DEFAULT_PPH = 200
+TIMELAPSE_MAX_PPH = 360
+TIMELAPSE_MIN_FPS = 20
+TIMELAPSE_MAX_FPS = 80
+
 
 # packages up response of bot, flavor of response and eventual changes in keyboard
 class Answer:
@@ -32,6 +37,7 @@ class Answer:
 # divides text inputs from the user up and calls module functions
 def divvy(fullmess):
 
+    # make photo with picamera
     def photocall(msg):
         os.makedirs("./data/snaps", exist_ok=True)
         timestamp = True if "ts" in msg else False
@@ -45,12 +51,14 @@ def divvy(fullmess):
             return Answer(snap(ts=timestamp, mode=mode), 'image',
                           comments="An error occured in photocall. Using default settings.")
 
+    # make video with picamera
     def videocall(msg):
         os.makedirs("./data/snaps", exist_ok=True)
         if not lib.timelapse.time_lapse_running:
             return Answer(vid(int(msg[1])), 'vid')
         return Answer("Eine Zeitrafferaufnahme läuft gerade. Videofunktion außer Kraft gesetzt.", 'txt')
 
+    # instantiate thread with timelapse photography function
     def timelapsecall(msg):
         os.makedirs("./data/timelapses", exist_ok=True)
         if msg[1] == 'retrieve':
@@ -67,16 +75,16 @@ def divvy(fullmess):
         if not lib.timelapse.time_lapse_running:
 
             if len(msg) % 2 != 0:
-                pph = int(msg[1])
+                pph = int(msg[1]) if (int(msg[1]) < 360) else TIMELAPSE_MAX_PPH
                 ptot = int(msg[2])
             else:
-                pph = 200  # allow for 200 photos per hour as default. Rather play with fps
+                pph = TIMELAPSE_DEFAULT_PPH  # allow for 200 photos per hour as default. Rather play with fps
                 ptot = int(msg[1]) * pph  # make length of timelapse directly settable
 
             delay = int(msg[msg.index("waitfor") + 1]) if "waitfor" in msg else 0
             fpers = msg[msg.index("fps") + 1] if "fps" in msg else "25"
 
-            if not 20 <= int(fpers) <= 80:
+            if not TIMELAPSE_MIN_FPS <= int(fpers) <= TIMELAPSE_MAX_FPS:
                 return Answer("Abbruch. Gültige FPS settings: 20 - 80 FPS", "txt")
             timestamp = lib.timelapse.start_timelapse(pph, ptot, delay, fpers)
             sleep(1)
@@ -90,15 +98,17 @@ def divvy(fullmess):
             return Answer(runmess, 'txt')
         return Answer("Eine Zeitrafferaufnahme läuft bereits.", "txt")
 
+    # activate relais of PiFaceDigital II board
     def relaiscall(msg):
         activate_relais(msg[1], msg[2])
         return Answer("Relais geschaltet.", "txt")
 
+    # Print help message
     def call_for_help(msg):
         tirade = "Dies ist der PiMonitorBot.\nFunktionen (ohne Anführungszeichen eingeben):\n" \
                  "'Keyboard AV': aktiviert ein Keyboard zur Bedienung der Kamerafunktionen.\n" \
                  "'photo': Schießt ein Foto und sendet es. " \
-                 "Optional: zusätzliches Argument 'hd' für HD Foto, 'ts' für Zeitstempel, 'night' für Nachtaufnahme.\n" \
+                 "Optional: zusätzl. Argument 'hd' für HD Foto, 'ts' für Zeitstempel, 'night' für Nachtaufnahme.\n" \
                  "'video <sekunden>': Schießt ein Video von <sekunden> Länge und sendet es.\n" \
                  "'timelapse <photos_pro_h> <gesamtzahl_photos>': Zeitrafferaufnahme. \n" \
                  "Alternative (moderne) Syntax: timelapse <dauer_stunden>.\n" \
@@ -110,8 +120,8 @@ def divvy(fullmess):
                  "Alle anderen Kommandos werden als shell commands für den RPi interpretiert.\n"
         return Answer(tirade, "txt")
 
+    # activate new keyboard
     def keyboardcall(msg):
-
         admin = ReplyKeyboardMarkup(keyboard=[
             [KeyboardButton(text='$exceptions'), KeyboardButton(text='$stats')],
             [KeyboardButton(text='$historylog'), KeyboardButton(text='$errorlog')],
@@ -175,17 +185,12 @@ def macro(querystring):
 
     if querystring == "clean":
         if lib.timelapse.time_lapse_running:
-            return chaincall("rm data/snaps/*")
+            return chaincall("rm -rf data/snaps/*")
         else:
-            return chaincall("rm data/snaps/* && rm -rf data/timelapses/*")
+            return chaincall("rm -rf data/snaps/* && rm -rf data/timelapses/*")
 
     try:
         answer = macrodic[querystring]
         return chaincall(answer)
     except KeyError:
         return "Ein solches Makro existiert nicht."
-
-
-# ReplyMarkupKeyboard definitions here
-
-

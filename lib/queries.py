@@ -6,6 +6,8 @@ from data.tokens import valid_users
 from lib.textparser import divvy
 
 
+# sends queries to divvy and determines how to treat the Answer object returned by it.
+# post txt, send video or image
 def queries(bot, chat_id, username, txtmess):
 
     print("Text message from @%s reading '%s'" % (username, txtmess))

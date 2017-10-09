@@ -22,10 +22,10 @@ echo "System stability: $(cat logs/monitorlog.log | grep "Traceback" | wc -l) py
 echo ""
 echo "Security:"
 intruders=$(cat logs/history.log | grep -A 3 "INTRUDER")
-if [[ $intruders = "" ]] ; then
+if [[ ${intruders} = "" ]] ; then
     echo "No foreign attempts to control the bot were logged."
 else
-    echo $intruders
+    echo ${intruders}
 fi
 if [[ $# -ne 0 ]] ; then
     if [[ $1 = "-v" ]] ; then

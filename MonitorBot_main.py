@@ -21,7 +21,6 @@ def main():
 
         if content_type is 'text':
             queries(mh_bot, chat_id, username, msg["text"])
-
     
     mh_bot = telepot.Bot(TOKEN)
     MessageLoop(mh_bot,
