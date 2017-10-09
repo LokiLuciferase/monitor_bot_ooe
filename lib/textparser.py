@@ -73,7 +73,7 @@ def divvy(fullmess):
                 pph = 200  # allow for 200 photos per hour as default. Rather play with fps
                 ptot = int(msg[1]) * pph  # make length of timelapse directly settable
 
-            delay = msg[msg.index("waitfor") + 1] if "waitfor" in msg else 0
+            delay = int(msg[msg.index("waitfor") + 1]) if "waitfor" in msg else 0
             fpers = msg[msg.index("fps") + 1] if "fps" in msg else "25"
 
             if not 20 <= int(fpers) <= 80:
