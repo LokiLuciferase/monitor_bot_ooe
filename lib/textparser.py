@@ -4,10 +4,11 @@
 
 
 import textwrap
+import sys
 
 from lib.processor import chaincall
 
-minimal = False
+minimal = True if (len(sys.argv) == 1 and sys.argv[0] == "--minimal") else False
 try:
     import lib.timelapse
     from lib.camcont import snap, vid
@@ -52,7 +53,7 @@ def macro(querystring):
                 }
 
     if querystring == "macros":
-        return "Existierende Makros:\n" + "".join(["%s : %s\n" % (x, y) for x, y in macrodic.items()])
+        return "Existing macros:\n" + "".join(["%s : %s\n" % (x, y) for x, y in macrodic.items()])
 
     if querystring == "clean":
         if lib.timelapse.time_lapse_running:

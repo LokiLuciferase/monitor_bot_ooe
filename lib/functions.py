@@ -9,14 +9,7 @@ from time import sleep
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 
 from lib.textparser import Answer
-
-minimal = False
-try:
-    import lib.timelapse
-    from lib.camcont import snap, vid
-    from lib.relaiscont import activate_relais
-except ModuleNotFoundError:
-    minimal = True
+from lib.textparser import minimal
 
 TIMELAPSE_DEFAULT_PPH = 200
 TIMELAPSE_MAX_PPH = 360
@@ -189,3 +182,6 @@ if not minimal:
                'start': startcall, 'keyboard': keyboardcall, 'help': call_for_help}
 else:
     calldic = {'start': startcall, 'keyboard': keyboardcall, 'help': call_for_help}
+
+if __name__ == "__main__":
+    os._exit(1)

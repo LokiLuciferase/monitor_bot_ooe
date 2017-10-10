@@ -16,7 +16,6 @@ def chaincall(querystring):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE))
     for query in querylists:
-        print(querylists)
         jobs.append(subprocess.Popen(query,
                                      shell=True,
                                      stdin=jobs[-1].stdout,
