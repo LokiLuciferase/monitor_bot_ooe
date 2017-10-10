@@ -137,12 +137,14 @@ def call_for_help(msg):
         'ts' to add a timestamp
         'night' to make a long-exposure photo
     
-        'video <duration_sec>': records a video.
+        'video <duration_sec>': records a video. 
+        This requires gpac to be installed.
     
         'timelapse <duration_h>: records a timelapse video in a seperate thread (which means you can continue using the bot).
         Optional arguments:
         'fps <frames_per_sec>' to change output framerate
         'waitfor <hours>' to wait for the designated time before starting timelapse.
+        Timelapse requires ffmpeg to be installed.
     
     If the pifacedigitalio and pifacecommon modules are installed:
     'keyboard relais': brings up a keyboard with common shortcuts for handling relais.

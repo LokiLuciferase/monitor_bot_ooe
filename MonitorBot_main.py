@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import os
 import time
 
 import telepot
@@ -33,6 +34,7 @@ def main():
 
 if __name__ == "__main__":
 
+    os.makedirs("./logs", exist_ok=True)
     if sys.platform != "linux":
         print("Warning: This bot is optimized for controlling linux machines.\n")
     main()
