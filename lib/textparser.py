@@ -70,7 +70,7 @@ def macro(querystring):
 # divides text inputs from the user up and calls module functions from hash of functions from functions.py
 def divvy(fullmess):
 
-    from experiments.functions import calldic
+    from lib.functions import calldic
     noslash = fullmess[1:] if fullmess[0] == '/' else fullmess # remove trailing telegram link character
 
     # if the message is a macro

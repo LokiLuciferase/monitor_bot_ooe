@@ -30,11 +30,11 @@ def queries(bot, chat_id, username, txtmess):
         if len(say.payload) != 0:
             if len(say.payload) > 1:
                 for item in say.payload[:-1]:
-                    print("Response: '%s'" % item)
+                    #print("Response: '%s'" % item)
                     bot.sendMessage(chat_id, item)
                 bot.sendMessage(chat_id, say.payload[-1])
             else:
-                print("Response: '%s'" % say.payload[0])
+                #print("Response: '%s'" % say.payload[0])
                 bot.sendMessage(chat_id, say.payload[0], reply_markup=say.keys)
 
     elif say.type == 'image':
