@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys
 import os
+import sys
 import time
 
 import telepot
 from telepot.loop import MessageLoop
 
-from data.tokens import TOKEN
 from lib.queries import queries
+from secrets.tokens import TOKEN
 
 sys.path.insert(0, sys.path[0])
 

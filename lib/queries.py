@@ -3,11 +3,10 @@
 # and calls the appropriate telepot function for sending it over telegram.
 
 import os
-
 from datetime import datetime
 
-from data.tokens import valid_users
 from lib.textparser import divvy
+from secrets.tokens import valid_users
 
 
 # sends queries to divvy and determines how to treat the Answer object returned by it.

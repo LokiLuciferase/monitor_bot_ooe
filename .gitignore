@@ -121,3 +121,8 @@ logs/
 !/lib/queries.py
 !/lib/functions.py
 /experiments/functions.py
+/secrets/token
+/secrets/valid_users
+/secrets/tokens.py
+/secrets/botname
+/secrets/__init__.py
