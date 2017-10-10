@@ -107,7 +107,7 @@ def timelapsecall(msg):
         Retrieve the finished movie with 'timelapse retrieve'.
         """.format(tp=timestamp, td=totaldur, fs=fpers, tc=str(lib.timelapse.endtimes))
 
-        return Answer(runmess_eng, 'txt')
+        return Answer(dedent(runmess_eng), 'txt')
     return Answer("A timelapse video recording is already running.", "txt")
 
 
