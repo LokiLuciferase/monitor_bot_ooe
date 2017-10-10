@@ -8,7 +8,7 @@ import sys
 
 from lib.processor import chaincall
 
-minimal = True if (len(sys.argv) == 1 and sys.argv[0] == "--minimal") else False
+minimal = True if (len(sys.argv) == 2 and sys.argv[1] == "--minimal") else False
 try:
     import lib.timelapse
     from lib.camcont import snap, vid

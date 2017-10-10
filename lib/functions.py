@@ -16,7 +16,7 @@ try:
     from lib.camcont import snap, vid
     from lib.relaiscont import activate_relais
 except ModuleNotFoundError:
-    minimal = True
+    pass
 
 TIMELAPSE_DEFAULT_PPH = 200
 TIMELAPSE_MAX_PPH = 360
