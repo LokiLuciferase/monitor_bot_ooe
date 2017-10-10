@@ -41,11 +41,8 @@ rm -rf ../../pyi_mbo
 chown -R $SUDO_USER dist
 
 # write build note
-tokenfile="../data/tokens.py"
-allowed_users=$(grep "valid_users" $tokenfile)
-thistoken=$(grep "TOKEN" $tokenfile)
-
-echo "Token of this bot and its ID on telegram: ${thistoken}
-Telegram nicknames allowed to interact with this bot: ${allowed_users}" > dist/buildnotes.txt
+echo "Token of this bot: ${token}
+Telegram nicknames allowed to interact with this bot: ${valid_users}
+Telegram ID of this bot (search for it): ${botname}" > dist/buildnotes.txt
 
 echo "Build has completed."
