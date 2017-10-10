@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "===================="
-echo "Raspberry Pi Status"
+echo "System Status"
 echo "===================="
 echo ""
 echo "Uptime:"

@@ -1,6 +1,6 @@
 # textparser determines the type of input (shell command, macro, or bot function command)
 # and routes the input accordingly
-# the response is packaged up in an Answer object and returned to the bot to be sent
+# the response is packaged up in an Answer object and returned to the bot to be sent.
 
 
 import textwrap
