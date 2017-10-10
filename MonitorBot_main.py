@@ -34,5 +34,5 @@ def main():
 if __name__ == "__main__":
 
     if sys.platform != "linux":
-        print("Warning: This bot is optimized for controlling linux machines.")
+        print("Warning: This bot is optimized for controlling linux machines.\n")
     main()

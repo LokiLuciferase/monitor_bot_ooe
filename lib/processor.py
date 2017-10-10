@@ -24,6 +24,6 @@ def chaincall(querystring):
                                      stderr=subprocess.PIPE))
     out, err = jobs[-1].communicate()
     if err:
-        return "%s\n\nShell has returned the error:\n%s" % (out.decode('utf-8'), err.decode('utf-8'))
+        return "%s\n\nShell has returned the error:\n\n%s" % (out.decode('utf-8'), err.decode('utf-8'))
     else:
         return out.decode('utf-8')

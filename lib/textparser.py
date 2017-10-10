@@ -14,7 +14,7 @@ try:
     from lib.relaiscont import activate_relais
 except ModuleNotFoundError:
     minimal = True
-    print("Running in minimal configuration (shell commands only).\n")
+    print("Running in minimal configuration (shell commands only).")
 
 
 # packages up response of bot, flavor of response and eventual changes in keyboard
@@ -87,4 +87,3 @@ def divvy(fullmess):
         return Answer(chaincall(noslash), "txt")
     except IndexError:
         return Answer("Missing arguments. For help, enter 'help'.", 'txt')
-
