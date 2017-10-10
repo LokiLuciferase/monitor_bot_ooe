@@ -119,7 +119,7 @@ def relaiscall(msg):
 
 # Print help message
 def call_for_help(msg):
-    helpmess_eng = """
+    helpmess_full = """
     MonitorBot defines some internal functions which should be entered without quotation marks.
     All unrecognized commands are sent to the underlying OS as a shell command, and the stdout
     (and potential stderr) output is returned.
@@ -127,7 +127,7 @@ def call_for_help(msg):
     Internal functions:
         'help': display this message
         '$macros': display the available shell macros
-        '$stats': displays some data of the underlying machine
+        '$stats': displays some data of the underlying machine. Some require additional programs.
         'keyboard admin': brings up a keyboard with the most important control commands for the bot.
     
     If the picamera module is installed:
@@ -152,7 +152,20 @@ def call_for_help(msg):
     
     """
 
-    return Answer(dedent(helpmess_eng), "txt")
+    helpmess_min = """
+    MonitorBot defines some internal functions which should be entered without quotation marks.
+    All unrecognized commands are sent to the underlying OS as a shell command, and the stdout
+    (and potential stderr) output is returned.
+    
+    Internal functions:
+        'help': display this message
+        '$macros': display the available shell macros
+        '$stats': displays some data of the underlying machine. Some require additional programs.
+        'keyboard admin': brings up a keyboard with the most important control commands for the bot.
+    """
+    if minimal:
+        return Answer(dedent(helpmess_min), "txt")
+    return Answer(dedent(helpmess_full), "txt")
 
 
 # activate new keyboard
