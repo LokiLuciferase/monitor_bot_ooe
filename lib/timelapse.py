@@ -1,3 +1,7 @@
+# timelapse implements a timelapse photography functionality
+# running in a seperate thread as to not disturb the regular function of the bot.
+
+
 import os
 import threading
 from datetime import datetime, timedelta

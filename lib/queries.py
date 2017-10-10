@@ -1,3 +1,7 @@
+# queries writes the text input from the bot to a log file
+# and determines the type of return value from textparser (text, video, image...)
+# and calls the appropriate telepot function for sending it over telegram.
+
 import os
 
 from datetime import datetime
@@ -17,6 +21,7 @@ def queries(bot, chat_id, username, txtmess):
             intrudermess = "INTRUDER detected. Username: %s. Message: %s" % (username, txtmess)
             print(intrudermess)
             logfile.write(intrudermess)
+            return
         logfile.write("[%s] %s: %s\n" % (datetime.now(), username, txtmess))
 
     say = divvy(txtmess)
@@ -29,6 +34,7 @@ def queries(bot, chat_id, username, txtmess):
                     bot.sendMessage(chat_id, item)
                 bot.sendMessage(chat_id, say.payload[-1])
             else:
+                print("Response: '%s'" % say.payload[0])
                 bot.sendMessage(chat_id, say.payload[0], reply_markup=say.keys)
 
     elif say.type == 'image':

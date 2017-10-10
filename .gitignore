@@ -119,3 +119,4 @@ ENV/
 logs/
 !/lib/timelapse.py
 !/lib/queries.py
+!/lib/functions.py
