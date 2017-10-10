@@ -11,6 +11,13 @@ from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 from lib.textparser import Answer
 from lib.textparser import minimal
 
+try:
+    import lib.timelapse
+    from lib.camcont import snap, vid
+    from lib.relaiscont import activate_relais
+except ModuleNotFoundError:
+    minimal = True
+
 TIMELAPSE_DEFAULT_PPH = 200
 TIMELAPSE_MAX_PPH = 360
 TIMELAPSE_MIN_FPS = 20
