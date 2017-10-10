@@ -71,20 +71,20 @@ def macro(querystring):
 def divvy(fullmess):
 
     from lib.functions import calldic
+    noslash = fullmess[1:] if fullmess[0] == '/' else fullmess # remove trailing telegram link character
 
     # if the message is a macro
-    if fullmess[0] == '$':
+    if noslash[0] == '$':
         return Answer(macro(fullmess[1:]), "txt")
 
     # if the message is no macro
-    # remove telegram link character and try running bot function
-    nomacro = fullmess[1:] if fullmess[0] == '/' else fullmess
-    splitmsg = nomacro.split()
+    # try running bot function
+    splitmsg = noslash.split()
     try:
         return calldic[splitmsg[0]](splitmsg)
     except KeyError:
         # if no appropriate function found, run shell call
-        return Answer(chaincall(nomacro), "txt")
+        return Answer(chaincall(noslash), "txt")
     except IndexError:
         return Answer("Missing arguments. For help, enter 'help'.", 'txt')
 
