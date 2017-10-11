@@ -11,13 +11,14 @@ from lib.processor import chaincall
 building=False
 minimal = True if ((len(sys.argv) == 2 and sys.argv[1] == "--minimal") or building) else False
 
-try:
-    import lib.timelapse
-    from lib.camcont import snap, vid
-    from lib.relaiscont import activate_relais
-except ModuleNotFoundError:
-    minimal = True
-    print("Running in minimal configuration (shell commands only).")
+if not minimal:
+    try:
+        import lib.timelapse
+        from lib.camcont import snap, vid
+        from lib.relaiscont import activate_relais
+    except ModuleNotFoundError:
+        minimal = True
+        print("Running in minimal configuration (shell commands only).")
 
 
 # packages up response of bot, flavor of response and eventual changes in keyboard

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# builds the bot to a single binary in the folder /home/pi/scripts/pyi_mbo , then move it back here
-# this path is defined in buildspec where it has to be changed if necessary
+# builds the bot with main in sourcepath to the build directory buildpath , then move it back here
 
 sourcepath="/home/pi/scripts/monitor_bot_ooe"
 buildpath="/home/pi/scripts/pyi_mbo"

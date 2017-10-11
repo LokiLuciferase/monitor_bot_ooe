@@ -11,12 +11,13 @@ from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 from lib.textparser import Answer
 from lib.textparser import minimal
 
-try:
-    import lib.timelapse
-    from lib.camcont import snap, vid
-    from lib.relaiscont import activate_relais
-except ModuleNotFoundError:
-    pass
+if not minimal:
+    try:
+        import lib.timelapse
+        from lib.camcont import snap, vid
+        from lib.relaiscont import activate_relais
+    except ModuleNotFoundError:
+        pass
 
 TIMELAPSE_DEFAULT_PPH = 200
 TIMELAPSE_MAX_PPH = 360
@@ -31,12 +32,12 @@ def startcall(msg):
     Use this bot to issue shell commands to a computer via the standard bash syntax,
     and stdout/stderr of the called process is returned to the chat.
     
-    For Raspberry Pi with installed Picamera module,
+    For Raspberry Pis with installed Picamera module,
     functionality is included to snap photos, record videos and timelapse videos.
-    For Raspberry Pi with installed PiFace2Digital (circuit board) module,
+    For Raspberry Pis with installed PiFace2Digital (circuit board) module,
     functionality is included to remote control relais activation.
     
-    For further information, enter 'hilfe'.
+    For further information, enter 'help'.
     """
     return Answer(dedent(startmess), "txt")
 
