@@ -3,16 +3,21 @@
 # builds the bot to a single binary in the folder /home/pi/scripts/pyi_mbo , then move it back here
 # this path is defined in buildspec where it has to be changed if necessary
 
-cd /home/pi/scripts/monitor_bot_ooe/setup
+sourcepath="/home/pi/scripts/monitor_bot_ooe"
+buildpath="/home/pi/scripts/pyi_mbo"
+binpath="/home/pi/scripts/monitor_bot_ooe/setup"
+
+cd $sourcepath/setup
 
 if [[ $USER != "root" ]]; then
     echo "This script requires root privileges."
     exit 1
 fi
 
-cp -r ../../monitor_bot_ooe/ ../../pyi_mbo
-cp buildspec ../../pyi_mbo/build.spec
-pushd ../../pyi_mbo
+cp -r ../../monitor_bot_ooe/ $buildpath
+cp buildspec $buildpath/build.spec
+pushd $buildpath
+sed -i "s|buildpath|${buildpath}|g" build.spec
 
 if [[ -n $1 ]]; then
     if [[ $1 = "--minimal" ]]; then
@@ -35,9 +40,9 @@ botname = '${botname}'
 # compile
 pyinstaller build.spec
 popd
-mv ../../pyi_mbo/dist .
-cp -a ../scripts ./dist
-rm -rf ../../pyi_mbo
+mv $buildpath/dist .
+cp -a $buildpath/scripts $binpath/dist
+rm -rf $buildpath
 chown -R $SUDO_USER dist
 
 # write build note

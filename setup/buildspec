@@ -4,12 +4,12 @@ block_cipher = None
 
 
 a = Analysis(['MonitorBot_main.py'],
-             pathex=['/home/pi/scripts/pyi_mbo'],
+             pathex=['buildpath'],
              binaries=[],
-             datas=[('/home/pi/scripts/pyi_mbo/scripts/check_reboot.sh', './scripts'),
-                    ('/home/pi/scripts/pyi_mbo/scripts/update.sh', './scripts'),
-                    ('/home/pi/scripts/pyi_mbo/scripts/stats.sh', './scripts'),
-                    ('/home/pi/scripts/pyi_mbo/LICENSE', '.')],
+             datas=[('buildpath/scripts/check_reboot.sh', './scripts'),
+                    ('buildpath/scripts/update.sh', './scripts'),
+                    ('buildpath/scripts/stats.sh', './scripts'),
+                    ('buildpath/LICENSE', '.')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
