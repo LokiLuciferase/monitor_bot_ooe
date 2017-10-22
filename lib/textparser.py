@@ -3,8 +3,8 @@
 # the response is packaged up in an Answer object and returned to the bot to be sent.
 
 
-import textwrap
 import sys
+import textwrap
 
 from lib.processor import chaincall
 
@@ -75,7 +75,7 @@ def macro(querystring):
 def divvy(fullmess):
 
     from lib.functions import calldic
-    noslash = fullmess[1:] if fullmess[0] == '/' else fullmess # remove trailing telegram link character
+    noslash = fullmess[1:] if fullmess[0] == '/' else fullmess  # remove leading telegram link character
 
     # if the message is a macro
     if noslash[0] == '$':
