@@ -120,7 +120,8 @@ logs/
 !/lib/timelapse.py
 !/lib/queries.py
 !/lib/functions.py
-/experiments/functions.py
+!/lib/step_motor.py
+/experiments
 /secrets/token
 /secrets/valid_users
 /secrets/tokens.py

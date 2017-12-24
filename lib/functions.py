@@ -8,8 +8,7 @@ from time import sleep
 
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 
-from lib.textparser import Answer
-from lib.textparser import minimal
+from lib.textparser import Answer, minimal
 
 if not minimal:
     try:
@@ -90,13 +89,14 @@ def timelapsecall(msg):
 
         delay = int(msg[msg.index("waitfor") + 1]) if "waitfor" in msg else 0
         fpers = msg[msg.index("fps") + 1] if "fps" in msg else "25"
+        stepped = int(msg[msg.index("stepped") + 1]) if "stepped" in msg else False
 
         if int(fpers) <= TIMELAPSE_MIN_FPS:
             fpers = TIMELAPSE_MIN_FPS
         elif int(fpers) >= TIMELAPSE_MAX_FPS:
             fpers = TIMELAPSE_MAX_FPS
 
-        timestamp = lib.timelapse.start_timelapse(pph, ptot, delay, fpers)
+        timestamp = lib.timelapse.start_timelapse(pph, ptot, delay, fpers, stepped)
         sleep(1)
         totaldur = round(((60 / pph) * ptot), 3)
 
