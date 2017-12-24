@@ -72,7 +72,7 @@ class Stepper:
             if steps != None:
                 done_steps += 1
         self.nullify()
-        return False
+        return "Steps taken."
 
 
     def find_mid(self):
