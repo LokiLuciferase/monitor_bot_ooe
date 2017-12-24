@@ -1,9 +1,10 @@
 #
 # Created by LokiLuciferase on 24/12/2017.
 #
-import pifacedigitalio
 from time import sleep
-import math
+
+import pifacedigitalio
+
 
 class Stepper:
     # initialize pfd and make array lout and lin with 4 output pins and 3 input pins
@@ -62,7 +63,7 @@ class Stepper:
                 # if end is reached, return None
                 if (pos == [0, 0, 1] and not ccw) or (pos == [1, 0, 0] and ccw):
                     self.nullify()
-                    return
+                    return None
                 # if midpoint has been crossed, return 0
                 if find_mid:
                     if len(pos_mem) >= 3 and pos_mem[::-1][:3] == [[0, 1, 0], [0, 0, 0], [0, 1, 0]]:
@@ -71,6 +72,7 @@ class Stepper:
             if steps != None:
                 done_steps += 1
         self.nullify()
+        return False
 
 
     def find_mid(self):
