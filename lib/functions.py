@@ -59,8 +59,9 @@ def photocall(msg):
 # make video with picamera
 def videocall(msg):
     os.makedirs("./data/snaps", exist_ok=True)
+    stepped = int(msg[msg.index("stepped") + 1]) if "stepped" in msg else False
     if not lib.timelapse.time_lapse_running:
-        return Answer(vid(int(msg[1])), 'vid')
+        return Answer(vid(int(msg[1], stepped=stepped)), 'vid')
     return Answer("A timelapse recording is running at the moment. Video function temporarily disabled.", 'txt')
 
 

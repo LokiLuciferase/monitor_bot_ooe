@@ -5,8 +5,9 @@
 import os
 import subprocess
 import threading
-from datetime import datetime, timedelta
 from time import sleep, time
+
+from datetime import datetime, timedelta
 
 from lib.camcont import snap
 from lib.step_motor import Stepper
@@ -69,10 +70,10 @@ def timelapse(snaps_per_h, total_snaps, snaptime, waitfor, fps, stepped=False):
             pass
 
         if stepped and not move_right:
-            if Stepper().cycle(ccw=True, steps=stepstaken, delay=stepdelay) == None:
+            if type(Stepper().cycle(ccw=True, steps=stepstaken, delay=stepdelay)) == int:
                 move_right = True
         elif stepped and move_right:
-            if Stepper().cycle(steps=stepstaken, delay=stepdelay) == None:
+            if type(Stepper().cycle(steps=stepstaken, delay=stepdelay)) == int:
                 move_right = False
 
         sleep(3600 // snaps_per_h)

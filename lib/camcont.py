@@ -1,8 +1,11 @@
-from picamera import PiCamera, Color
-from time import sleep, time
-from datetime import datetime
 import subprocess
 from fractions import Fraction
+from time import sleep, time
+
+from datetime import datetime
+from picamera import PiCamera, Color
+
+from lib.step_motor import Stepper
 
 SAVELOC = './data/snaps/'
 
@@ -39,7 +42,7 @@ def snap(namegiven=None, qual='hd', ts=False, mode='default'):
 
 
 # Takes a video with PiCamera and converts it to mp4 with MP4Box
-def vid(duration):
+def vid(duration, stepped=False):
 
     vidname = "%s%s" % (SAVELOC, "-".join(str(time()).split(".")))
     with PiCamera() as cam:
@@ -48,7 +51,17 @@ def vid(duration):
         cam.start_preview()
         sleep(2)
         cam.start_recording("%s.h264" % vidname)
-        cam.wait_recording(duration)
+        if stepped:
+            stepdelay = 5  # ms
+            residue = stepped
+            move_right = False
+            while residue != True:
+                tempres = Stepper().cycle(steps=residue)
+                if tempres == None:
+                    residue = Stepper().cycle(steps=residue)
+            pass
+        else:
+            cam.wait_recording(duration)
         cam.stop_recording()
     subprocess.call(["MP4Box", "-quiet", "-add", "%s.h264" % vidname, "%s.mp4" % vidname])
     return "%s.mp4" % vidname

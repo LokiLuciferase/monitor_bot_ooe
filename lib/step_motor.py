@@ -41,9 +41,7 @@ class Stepper:
     def report_lin(self):
         return [x.value for x in self.lin]
 
-    # cycle through one iteration of steps in time dur
     def cycle(self, delay=5, steps=None, ccw=False, find_mid=False):
-
         delay_ms = delay / 1000
         usearray = self.fullcycle if not ccw else self.revcycle
         pos_mem = [self.report_lin()]
@@ -63,21 +61,21 @@ class Stepper:
                 # if end is reached, return None
                 if (pos == [0, 0, 1] and not ccw) or (pos == [1, 0, 0] and ccw):
                     self.nullify()
-                    return None
+                    return (total_steps - done_steps)
                 # if midpoint has been crossed, return 0
                 if find_mid:
                     if len(pos_mem) >= 3 and pos_mem[::-1][:3] == [[0, 1, 0], [0, 0, 0], [0, 1, 0]]:
                         self.nullify()
-                        return True
+                        return None
             if steps != None:
                 done_steps += 1
         self.nullify()
-        return "Steps taken."
+        return True
 
 
     def find_mid(self):
-        if not self.cycle(find_mid=True):
-            return self.cycle(ccw=True, find_mid=True)
+        if self.cycle(find_mid=True) != None:
+            self.cycle(ccw=True, find_mid=True)
 
 class PanShot(Stepper):
     def __init__(self):
@@ -92,7 +90,6 @@ class PanShot(Stepper):
             if not forever:
                 break
         self.find_mid()
-
 
 if __name__ == "__main__":
 
