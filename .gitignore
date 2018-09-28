@@ -108,7 +108,6 @@ ENV/
 !/lib/relaiscont.py
 !/lib/check_reboot.sh
 !/lib/textparser.py
-.gitignore
 /data/
 /log/
 /.idea/
@@ -126,3 +125,4 @@ logs/
 /secrets/tokens.py
 /secrets/botname
 /secrets/__init__.py
+*.iml
