@@ -10,6 +10,7 @@ from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 
 from lib.textparser import Answer
 from lib.textparser import minimal
+from lib.processor import chaincall
 
 if not minimal:
     try:
@@ -31,15 +32,24 @@ def startcall(msg):
     This is MonitorBot v0.1.
     Use this bot to issue shell commands to a computer via the standard bash syntax,
     and stdout/stderr of the called process is returned to the chat.
-    
+
     For Raspberry Pis with installed Picamera module,
     functionality is included to snap photos, record videos and timelapse videos.
     For Raspberry Pis with installed PiFace2Digital (circuit board) module,
     functionality is included to remote control relais activation.
-    
+
     For further information, enter 'help'.
     """
     return Answer(dedent(startmess), "txt")
+
+
+def wificall(msg):
+    if len(msg) == 0:
+        return Answer("Usage: wifi <WIFI SSID> <WIFI PW>", itemtype='txt')
+    if len(msg) != 2:
+        return Answer("2 Arguments expected, but got %s arguments" % len(msg), itemtype='txt')
+    retval = chaincall('bash ./scripts/update_wifi.sh %s %s' % (msg[0], msg[1]))
+    return Answer(retval, itemtype='txt')
 
 
 # make photo with picamera
@@ -124,40 +134,40 @@ def call_for_help(msg):
     MonitorBot defines some internal functions which should be entered without quotation marks.
     All unrecognized commands are sent to the underlying OS as a shell command, and the stdout
     (and potential stderr) output is returned.
-    
+
     Internal functions:
         'help': display this message
         '$macros': display the available shell macros
         '$stats': displays some data of the underlying machine. Some require additional programs.
         'keyboard admin': brings up a keyboard with the most important control commands for the bot.
-    
+
     If the picamera module is installed:
         'keyboard AV': activates a keyboard with shortcuts for handling camera functions.
         'photo': take a snapshot. Optional arguments:
         <sd, hd, uhd> to select quality
         'ts' to add a timestamp
         'night' to make a long-exposure photo
-    
-        'video <duration_sec>': records a video. 
+
+        'video <duration_sec>': records a video.
         This requires gpac to be installed.
-    
+
         'timelapse <duration_h>: records a timelapse video in a seperate thread (which means you can continue using the bot).
         Optional arguments:
         'fps <frames_per_sec>' to change output framerate
         'waitfor <hours>' to wait for the designated time before starting timelapse.
         Timelapse requires ffmpeg to be installed.
-    
+
     If the pifacedigitalio and pifacecommon modules are installed:
     'keyboard relais': brings up a keyboard with common shortcuts for handling relais.
     'relais <1,2> <duration_sec>': activate the relais 1 or 2 for the designated duration.
-    
+
     """
 
     helpmess_min = """
     MonitorBot defines some internal functions which should be entered without quotation marks.
     All unrecognized commands are sent to the underlying OS as a shell command, and the stdout
     (and potential stderr) output is returned.
-    
+
     Internal functions:
         'help': display this message
         '$macros': display the available shell macros
@@ -175,6 +185,7 @@ def keyboardcall(msg):
         [KeyboardButton(text='$exceptions'), KeyboardButton(text='$stats')],
         [KeyboardButton(text='$historylog'), KeyboardButton(text='$errorlog')],
         [KeyboardButton(text='$update'), KeyboardButton(text='$clean'), KeyboardButton(text='$reboot')],
+        [KeyboardButton(text='wifi')],
         [KeyboardButton(text='keyboard AV'), KeyboardButton(text='keyboard relais')]
     ])
 
@@ -202,9 +213,9 @@ def keyboardcall(msg):
 if not minimal:
     calldic = {'photo': photocall, 'video': videocall,
                'timelapse': timelapsecall, 'relais': relaiscall,
-               'start': startcall, 'keyboard': keyboardcall, 'help': call_for_help}
+               'start': startcall, 'wifi': wificall, 'keyboard': keyboardcall, 'help': call_for_help}
 else:
-    calldic = {'start': startcall, 'keyboard': keyboardcall, 'help': call_for_help}
+    calldic = {'start': startcall, 'wifi': wificall, 'keyboard': keyboardcall, 'help': call_for_help}
 
 if __name__ == "__main__":
     os._exit(1)
