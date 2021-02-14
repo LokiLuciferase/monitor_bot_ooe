@@ -44,10 +44,10 @@ def startcall(msg):
 
 
 def wificall(msg):
-    if len(msg) == 0:
+    if len(msg) == 1:
         return Answer("Usage: wifi <WIFI SSID> <WIFI PW>", itemtype='txt')
-    if len(msg) != 2:
-        return Answer("2 Arguments expected, but got %s arguments" % len(msg), itemtype='txt')
+    if len(msg) != 3:
+        return Answer("3 Arguments expected, but got %s arguments" % len(msg), itemtype='txt')
     retval = chaincall('bash ./scripts/update_wifi.sh %s %s' % (msg[0], msg[1]))
     return Answer(retval, itemtype='txt')
 
