@@ -16,7 +16,7 @@ def queries(bot, chat_id, username, txtmess):
     print("Text message from @%s reading '%s'" % (username, txtmess))
 
     with open("./logs/history.log", "a") as logfile:
-        if username not in valid_users:
+        if len(valid_users) and username not in valid_users:
             intrudermess = "INTRUDER detected. Username: %s. Message: %s" % (username, txtmess)
             print(intrudermess)
             logfile.write(intrudermess)
